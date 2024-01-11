@@ -19,7 +19,8 @@
                     <div class="col-lg-6">
                         <div>
                             <label for="companyname-field" class="form-label">Canal</label>
-                            <select onchange='' class="form-select form-select-sm" name="channels" id="canalsito">
+                            <select onchange='selectTemplate(this)' class="form-select form-select-sm" name="channels"
+                                id="canalsito">
                                 <option value="">Seleccione</option>
                                 <?php for($i = 0; $i < count($channels); $i++): ?>
                                     <?php if(in_array($i, $ch_approve)): ?>
@@ -41,42 +42,45 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-lg-12">
-                        <div class="table-responsive my-2">
-                            <table class="table table-sm align-middle table-nowrap mb-0" id="myTableDesign">
-                                <thead class="table-light text-center text-uppercase">
-                                    <tr>
-                                        <th scope="col">
-                                            <a type="button" class="btn btn-success btn-sm" id='btnNuevo'
-                                                onclick="addRow()">
-                                                <i class="ri-add-circle-fill"></i>
-                                            </a>
-                                        </th>
-                                        <th scope="col">Campo</th>
-                                        <th scope="col">Operador</th>
-                                        <th scope="col">Valor</th>
-                                    </tr>
-                                </thead>
-                            </table>
+                    <div class="col-lg-8">
+                        <div class="col-lg-21">
+                            <div class="table-responsive my-2">
+                                <table class="table table-sm align-middle table-nowrap mb-0">
+                                    <thead class="table-light text-center text-uppercase">
+                                        <tr>
+                                            <th scope="col">
+                                                <a type="button" class="btn btn-success btn-sm" id='btnNuevo'
+                                                    onclick="addRow()">
+                                                    <i class="ri-add-line"></i>
+                                                </a>
+                                            </th>
+                                            <th scope="col">Campo</th>
+                                            <th scope="col">Operador</th>
+                                            <th scope="col">Valor</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="myTableDesign"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <textarea class="form-control" id="showQue" name="showQue" disabled></textarea>
+                            <input type="hidden" name='prefix' id='prefix' value=<?php echo e($client['prefix']); ?>>
+                            <input type="hidden" name='onlyWhere' id='onlyWhere'>
+                            <input type="hidden" name='table_name' id='table_name2'>
+                            <input type="hidden" name='location' value='diseno'>
+                            <input type="hidden" id="cober" name='cober'>
+                            <input type="hidden" id="unic" name='unic'>
+                            <input type="hidden" id="repe" name='repe'>
+                            <input type="hidden" id="tota" name='total'>
+                            <input type="hidden" id="registros" name='registros'>
+                            <input type="hidden" id="id_cliente" name='id_cliente' value=<?php echo e($client['id']); ?>>
                         </div>
                     </div>
-                    <div class="col-lg-">
-                        <textarea class="form-control" id="showQue" name="showQue" disabled></textarea>
-                        <input type="hidden" name='prefix' id='prefix' value=<?php echo e($client['prefix']); ?>>
-                        <input type="hidden" name='onlyWhere' id='onlyWhere'>
-                        <input type="hidden" name='table_name' id='table_name2'>
-                        <input type="hidden" name='location' value='diseno'>
-                        <input type="hidden" id="cober" name='cober'>
-                        <input type="hidden" id="unic" name='unic'>
-                        <input type="hidden" id="repe" name='repe'>
-                        <input type="hidden" id="tota" name='total'>
-                        <input type="hidden" id="registros" name='registros'>
-                        <input type="hidden" id="id_cliente" name='id_cliente' value=<?php echo e($client['id']); ?>>
-                    </div>
-                    <div class="col-lg-12">
+                    <div class="col-lg-4">
                         <div class="table-responsive my-2">
                             <table class="table table-sm align-middle table-nowrap mb-0">
-                                <thead class="table-light text-center text-uppercase">
+                                <thead class="text-center text-uppercase">
                                     <tr>
                                         <th>cobertura</th>
                                         <th>unicos</th>
@@ -102,10 +106,10 @@
 
             <div class="modal-footer">
                 <div class="hstack gap-2 justify-content-end">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-success" id="guard">Guardar</button>
-                    <button type="button" onclick="probarConsulta()" class="btn btn-success"
-                        id="probar">Probar</button>
+                    <button type="button" class="btn btn-soft-danger" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" disabled='true' class="btn btn-soft-success" id="guard">Guardar</button>
+                    <button type="button" disabled='true' onclick="probarConsulta()" class="btn btn-soft-info"
+                        id="probar"><i class="ri-play-fill me-1 align-bottom"></i> Probar</button>
                     
                 </div>
             </div>
@@ -117,8 +121,73 @@
 
 <?php $__env->startSection('script'); ?>
     <script>
+        function acceptedStrategy(id, channels, prefix) {
+            // spinner.removeAttribute('hidden');
+            fetch('<?php echo e(route('strategy.accepted-strategy')); ?>', {
+                method: 'POST',
+                body: JSON.stringify({
+                    id: id,
+                    channels: channels,
+                    prefix: prefix,
+                }),
+                headers: {
+                    'content-type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                }
+            }).then(response => {
+                return response.json();
+            }).then(data => {
+                // Recargar la página actual
+                if (data.result === '201') {
+                    alert(data.message)
+                    // spinner.setAttribute('hidden', '');
+                    location.reload()
+                } else {
+                    // document.querySelector('.alert').classList.remove('d-none');
+                    // document.querySelector('.alert').classList.remove('alert-success');
+                    // document.querySelector('.alert').classList.add('alert-danger')
+                    // document.querySelector('#messages').innerHTML = data.message
+                }
+            });
+
+        }
+
         var i = 0;
         const csrfToken = "<?php echo e(csrf_token()); ?>";
+        document.getElementById("myForm").addEventListener('submit', validar);
+
+
+        function selectTemplate(select = '') {
+
+            prefix = document.getElementById('prefix').value
+            temp = document.getElementById('template')
+            lblTemplate = document.getElementById('lblTemplate')
+            temp.innerHTML = '<option value="">Seleccione</option>'
+            if (select.selectedOptions[0].text === 'AGENTE') {
+                objLista = <?php echo json_encode($lista_discadores, 15, 512) ?>;
+                for (var clave in objLista) {
+                    var opcion = document.createElement("option");
+                    opcion.value = objLista[clave].idlista;
+                    opcion.text = objLista[clave].descripcion + ' ' + objLista[clave].discador;
+                    lblTemplate.innerHTML = "Lista"
+                    temp.appendChild(opcion);
+                }
+                temp.disabled = false;
+            } else {
+                temp.disabled = true;
+                temp.value = '';
+            }
+
+            document.getElementById('guard').disabled = true;
+            document.getElementById('cobertura').innerHTML = `0,00%`
+            document.getElementById('unicos').innerHTML = `0`
+            document.getElementById('repetidos').innerHTML = `0`
+            document.getElementById('total').innerHTML = `0`
+            document.getElementById('cober').value = 0
+            document.getElementById('unic').value = 0
+            document.getElementById('repe').value = 0
+            document.getElementById('tota').value = 0
+        }
 
 
         function addRow() {
@@ -127,10 +196,8 @@
 
 
             var table = document.getElementById("myTableDesign");
-            // aceptaRepetidos(document.getElementById('canalsito'))
-
             document.getElementById('guard').disabled = true;
-
+            document.getElementById('probar').disabled = false;
             var row = table.insertRow(-1);
             row.id = 'tr_' + i
 
@@ -150,7 +217,7 @@
 
                 cell2.innerHTML =
                     `<input type="hidden" id="name_table" />
-                    <a onclick="borrarRow(this)" class="btn btn-sm btn-block mb-0 btn-danger mb-0"><i class="ri-delete-bin-2-line"></i></a>`;
+                    <a onclick="borrarRow(this)" class="btn btn-sm btn-block mb-0 btn-danger"><i class="ri-close-line"></i></a>`;
                 cell2.className = "text-center align-middle p-0"
 
                 cell3.innerHTML = lines
@@ -174,18 +241,53 @@
             document.getElementById("myTableDesign").deleteRow(i);
         }
 
+
+
+
         function probarConsulta() {
 
 
             document.getElementById('guard').disabled = true;
-            // spinner.removeAttribute('hidden');
             var query = document.getElementById('showQue').value;
             var prefix = document.getElementById('prefix').value;
             var table_name = document.getElementById('table_name2').value;
             var id_cliente = document.getElementById('id_cliente').value;
-
-
             var template = document.getElementById('template').value;
+            var canal = document.querySelector('#canalsito').value
+
+
+
+
+
+            if (canal == '') {
+                Swal.fire({
+                    title: 'Probando estrategia',
+                    icon: 'error',
+                    text: 'Debe seleccionar un Canal',
+                    showCloseButton: true
+                });
+                return;
+            }
+
+            if (template == '') {
+                Swal.fire({
+                    title: 'Probando estrategia',
+                    icon: 'error',
+                    text: 'Debe seleccionar una Lista',
+                    showCloseButton: true
+                });
+                return;
+            }
+
+            if (query == '') {
+                Swal.fire({
+                    title: 'Probando estrategia',
+                    icon: 'error',
+                    text: 'Debe seleccionar una Lista',
+                    showCloseButton: true
+                });
+                return;
+            }
 
             Swal.fire({
                 title: 'Probando estrategia',
@@ -196,10 +298,6 @@
                     Swal.showLoading();
                 },
             });
-
-            // document.getElementById('alerts-registros-no').classList.add("d-none")
-
-
 
             let opciones = {
                 style: "decimal",
@@ -215,8 +313,8 @@
                     table_name: table_name,
                     check: 1,
                     id_cliente: id_cliente,
-                    template: 100,
-                    channel: 1,
+                    template: template,
+                    channel: canal
                 }),
                 headers: {
                     'content-type': 'application/json',
@@ -260,12 +358,27 @@
                         text: data.error,
                         showCloseButton: true
                     })
-                    console.log(data.error)
                 }
-
-
-
             });
+        }
+
+        function validar(e) {
+            console.log(e)
+            const valoresElements = document.querySelectorAll('.valores');
+            if (document.getElementById("canalsito").value === '') {
+                alert('Debe selccionar el canal para la estrategia.');
+                document.getElementById("canalsito").focus()
+                e.preventDefault();
+                return false
+
+            } else if (valoresElements.length === 0) {
+                alert('debe haber al menos una consultar para generar la estrategia.');
+                document.getElementById("btnNuevo").focus()
+                e.preventDefault();
+                return false;
+            } else {
+                return true
+            }
         }
 
         function selectInputType(value, i, e, op = '') {

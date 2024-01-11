@@ -10,7 +10,7 @@ class ClientController extends Controller
 {
     public function index()
     {
-        $clients = Http::get(env('API_URL') . env('API_CLIENTS') . '/1')->collect()[0];
+        $clients = Http::get(env('API_URL') . env('API_CLIENTS') . '/' . auth()->user()->empresa_id)->collect()[0];
         return view('clients.index', compact('clients'));
         // return 'hola';
     }

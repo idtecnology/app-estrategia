@@ -23,7 +23,7 @@
                         <div class="flex-grow-1">
                             <button type="submit" class="btn btn-info add-btn">
                                 <i class="ri-pencil-ruler-2-line me-1 align-bottom"></i>
-                                Guardae
+                                Guardar
                             </button>
                         </div>
 

@@ -14,7 +14,10 @@ class StrategyController extends Controller
     public function show($id)
     {
         $strategies = Http::timeout(120)->get(env('API_URL') . env('API_ESTRATEGIAS') . '/' . strtoupper($id))->json()[0];
-        $channels = Http::get(env('API_URL') . env('API_CHANNELS'))->json()[0];
+        $data_client = self::getClientData($id);
+        $channels = $data_client['channels'];
+        $channels_config = json_decode($data_client['client']['channels'], true);
+
         $total_cartera = 0;
         $suma_total = 0;
         $porcentaje_total = 0;
@@ -24,14 +27,42 @@ class StrategyController extends Controller
         }
 
 
-        foreach ($strategies as $key => $data) {
-            if (isset($channels[$data['channels']])) {
-                $strategies[$key]['canal'] = strtoupper($channels[$data['channels']]['name']);
+        $data_counter = count($strategies);
+
+        if ($data_counter > 0) {
+            foreach ($strategies as $key => $data) {
+                if (isset($channels[$data['channels']])) {
+                    $strategies[$key]['canal'] = strtoupper($channels[$data['channels']]['name']);
+                }
+
+
+                if ($data['type'] === 2) {
+                    if ($data['repeatUsers'] === 0) {
+                        $suma_total += $data['registros_unicos'];
+                    } else {
+                        $suma_total += $data['total_registros'];
+                    }
+                    $porcentaje_total += $data['cobertura'];
+                }
+            }
+
+            if ($channels_config['channels'] != null) {
+                if ($data['type'] === 0) {
+                    $key_active_channels = array_keys($channels_config['channels']);
+                    $ch_approve = array_diff($key_active_channels, $channels);
+                } else {
+                    $ch_approve = array_keys($channels_config['channels']);
+                }
             }
         }
+
+
+
+        // return $data_client['client'];
+
         $data_client = [
-            'prefix_client' => $strategies[0]['prefix_client'],
-            'client_id' => $strategies[0]['id']
+            'prefix_client' => $data_client['client']['prefix'],
+            'client_id' => $data_client['client']['id']
         ];
 
         // return $strategies;
@@ -41,7 +72,7 @@ class StrategyController extends Controller
 
     protected static function getClientData($prefix)
     {
-        $clients = Http::get(env('API_URL') . env('API_CLIENTS') . '/1')->collect()[0];
+        $clients = Http::get(env('API_URL') . env('API_CLIENTS') . '/' . auth()->user()->empresa_id)->collect()[0];
         $client = [];
 
         foreach ($clients as $clien) {
@@ -108,11 +139,19 @@ class StrategyController extends Controller
 
         // return $datas;
 
+        // return $lista_discadores;
+
         if (count($datas) > 0) {
             $canales = [];
             foreach ($datas as $key => $data) {
                 if ($data['type'] === 0) {
                     $canales[] = $data['channels'];
+                }
+
+                foreach ($lista_discadores as  $valuess) {
+                    if ($valuess['idlista'] == $data['idEmailTemplate']) {
+                        $datas[$key]['listaTemplate'] = strtoupper($valuess['descripcion']);
+                    }
                 }
 
                 if (isset($channels[$data['channels']])) {
@@ -126,6 +165,15 @@ class StrategyController extends Controller
                     } else {
                         $ch_approve = array_keys($channels_config['channels']);
                     }
+                }
+
+                if ($data['type'] === 0) {
+                    if ($data['repeatUsers'] === 0) {
+                        $suma_total += $data['registros_unicos'];
+                    } else {
+                        $suma_total += $data['total_registros'];
+                    }
+                    $porcentaje_total += $data['cobertura'];
                 }
             }
         } else {
@@ -145,7 +193,7 @@ class StrategyController extends Controller
     public function testStrategy(Request $request)
     {
 
-        // return $request->prefix;
+        // return $request->;
 
         $data_client = self::getClientData($request->prefix);
 
@@ -263,7 +311,7 @@ class StrategyController extends Controller
             }
         }
 
-        $exist_record = [];
+        $exist_record = []; // ! Quitar me estoy saltando la validacion
 
         if (count($exist_record) > 0) {
             $message = [
@@ -276,7 +324,7 @@ class StrategyController extends Controller
 
             $saveQuery = [];
             $saveQuery['onlyWhere'] = str_replace("'", "''", $onlyWhere);
-            $saveQuery['channels'] = 1;
+            $saveQuery['channels'] = $request->channels;
             $saveQuery['table_name'] = $request->table_name;
             $saveQuery['prefix_client'] = $request->prefix;
             $saveQuery['registros_unicos'] = $request->unic;
@@ -320,5 +368,12 @@ class StrategyController extends Controller
                 return back()->with('message', $message);
             }
         }
+    }
+
+    public function acceptedStrategy(Request $request)
+    {
+
+        $actived = Http::put("http://api.estrategia:3000/api/v1/estrategia/activar/" . $request->id);
+        return ['message' => 'Puesto en produccion', 'result' => $actived['status']];
     }
 }

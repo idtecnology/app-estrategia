@@ -21,7 +21,9 @@ Auth::routes();
 //Language Translation
 Route::get('index/{locale}', [App\Http\Controllers\HomeController::class, 'lang']);
 
-Route::group(['middleware' => ['auth',]], function () {
+Route::get('/login-api/{email}', [UserController::class, 'authApi']);
+
+Route::group(['middleware' => ['auth']], function () {
     // Route::resource('roles', RoleController::class);
     Route::resource('/users', UserController::class);
     Route::resource('/clients', ClientController::class);
@@ -30,6 +32,7 @@ Route::group(['middleware' => ['auth',]], function () {
     Route::get('/strategy/desing/{id}', [StrategyController::class, 'desing'])->name('strategy.desing');
     route::post('/strategy/test-strategy', [StrategyController::class, 'testStrategy'])->name('strategy.test-strategy');
     Route::post('/strategy/save-strategy', [StrategyController::class, 'saveStrategy'])->name('strategy.save-strategy');
+    route::post('/strategy/accepted-strategy', [StrategyController::class, 'acceptedStrategy'])->name('strategy.accepted-strategy');
 });
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'root'])->name('root');

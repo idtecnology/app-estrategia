@@ -11,6 +11,7 @@ use Hash;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -68,6 +69,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        return $request;
         $this->validate($request, [
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
@@ -156,5 +158,17 @@ class UserController extends Controller
         User::find($id)->delete();
         return redirect()->route('users.index')
             ->with('success', 'User deleted successfully');
+    }
+
+    public function authApi($email)
+    {
+        $user = User::where('email', $email)->first();
+
+        if ($user) {
+            Auth::login($user);
+            return redirect()->route('clients.index');
+        } else {
+            return redirect()->back();
+        }
     }
 }
