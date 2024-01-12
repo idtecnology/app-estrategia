@@ -170,4 +170,20 @@ class UserController extends Controller
             return redirect()->back();
         }
     }
+
+    public function storeUsers(Request $request)
+    {
+
+        $user = User::where('email', $request->email)->first();
+
+        if ($user) {
+            return response()->json(['status' => 'error', 'message' => 'El email, ya existe'], 400);
+        } else {
+            $input = $request->all();
+            $input['password'] = Hash::make($input['password']);
+            $user = User::create($input);
+            $user->assignRole($request->input('roles'));
+            return response()->json(['message' => 'exito',], 200);
+        }
+    }
 }

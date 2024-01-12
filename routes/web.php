@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Clients\ClientController;
 use App\Http\Controllers\Configuration\UserController;
+use App\Http\Controllers\RegisterUserController;
 use App\Http\Controllers\Strategy\StrategyController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,7 @@ Auth::routes();
 Route::get('index/{locale}', [App\Http\Controllers\HomeController::class, 'lang']);
 
 Route::get('/login-api/{email}', [UserController::class, 'authApi']);
+
 
 Route::group(['middleware' => ['auth']], function () {
     // Route::resource('roles', RoleController::class);

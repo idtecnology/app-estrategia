@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-layout="horizontal" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-layout="horizontal" data-topbar="light"
+    data-sidebar="dark" data-sidebar-size="lg">
 
 <head>
     <meta charset="utf-8" />
@@ -8,15 +9,15 @@
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ URL::asset('build/images/favicon.ico')}}">
+    <link rel="shortcut icon" href="{{ URL::asset('build/images/favicon.ico') }}">
     @include('layouts.head-css')
 </head>
+
 <body>
 
     <!-- Begin page -->
     <div id="layout-wrapper">
-        @include('layouts.topbar')
-        @include('layouts.sidebar')
+
         <!-- ============================================================== -->
         <!-- Start right Content here -->
         <!-- ============================================================== -->
@@ -27,7 +28,7 @@
                     @yield('content')
                 </div> <!-- content -->
             </div>
-            @include('layouts.footer')
+
         </div>
         <!-- ============================================================== -->
         <!-- End Right content here -->
@@ -36,7 +37,7 @@
     <!-- END wrapper -->
 
     <!-- Right Sidebar -->
-    @include('layouts.customizer')
+
     <!-- END Right Sidebar -->
 
     @include('layouts.vendor-scripts')
