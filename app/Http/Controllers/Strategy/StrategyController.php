@@ -65,7 +65,7 @@ class StrategyController extends Controller
             'client_id' => $data_client['client']['id']
         ];
 
-        return $strategies;
+        // return $strategies;
 
         return view('strategy.index', compact('strategies', 'data_client'));
     }
