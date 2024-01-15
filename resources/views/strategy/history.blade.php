@@ -7,10 +7,10 @@
 @section('content')
     @component('components.breadcrumb')
         @slot('li_1')
-            Estrategias Activas
+            Estrategias historicas
         @endslot
         @slot('title')
-            Listado {{ $data_client['prefix_client'] }}
+            Listado historico {{ $data_client['prefix_client'] }}
         @endslot
     @endcomponent
     <div class="row">
@@ -19,22 +19,9 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-4">
-                            <a href="{{ route('clients.index') }}" class="btn btn-dark">
+                            <a href="{{ route('strategy.show', $data_client['prefix_client']) }}" class="btn btn-dark">
                                 <i class="ri-arrow-left-line me-1 align-bottom"></i>
                                 Regresar
-                            </a>
-                        </div>
-                        <div class="col-md-auto ms-auto">
-                            <a href="{{ route('strategy.history', [$data_client['prefix_client'], 3]) }}"
-                                class="btn btn-outline-danger">
-                                <i class="ri-history-line me-1 align-bottom"></i>
-                                Histórico
-                            </a>
-                        </div>
-                        <div class="col-md-auto">
-                            <a href="{{ route('strategy.desing', $data_client['prefix_client']) }}" class="btn btn-info">
-                                <i class="ri-pencil-ruler-2-line me-1 align-bottom"></i>
-                                Diseñar
                             </a>
                         </div>
                     </div>
@@ -42,7 +29,7 @@
             </div>
         </div>
         <div class="col-xxl-12">
-            <div class="card" id="companyList">
+            <div class="card">
                 <div class="card-header">
                     <div class="row g-2">
                         <div class="col-md-3">
@@ -57,71 +44,61 @@
                                 <select class="form-control mb-0" data-choices data-choices-search-false
                                     id="choices-single-default">
                                     <option value="pos">Posicion</option>
-                                    <option value="email">Email</option>
-                                    <option value="name">Nombre</option>
-                                    <option value="roles">Rol</option>
+                                    <option value="channel">Canal</option>
+                                    <option value="activation">Activaci&oacute;n</option>
                                 </select>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
-                    <div>
+                    <div class="listjs-table">
                         <div class="table-responsive table-card mb-3">
-                            <table class="table align-middle table-nowrap mb-0" id="customerTable">
+                            <table class="table align-middle table-nowrap mb-0" id="companyList">
                                 <thead class="table-light">
                                     <tr>
 
                                         <th class="sort" data-sort="pos" scope="col">#</th>
-                                        <th class="sort" data-sort="name" scope="col">Canal</th>
-                                        <th class="sort text-center" data-sort="email" scope="col">Registros</th>
-                                        <th class="sort" data-sort="email" scope="col">Repetidos</th>
-                                        <th class="sort" data-sort="email" scope="col">Criterio</th>
-                                        <th class="sort" data-sort="email" scope="col">Activacion</th>
-                                        <th scope="col">Acciones</th>
+                                        <th class="sort" data-sort="channel" scope="col">Canal</th>
+                                        <th scope="col">Registros</th>
+                                        <th scope="col">Repetidos</th>
+                                        <th scope="col">Criterio</th>
+                                        <th class="sort" data-sort="activation" scope="col">Activaci&oacute;n</th>
                                     </tr>
                                 </thead>
                                 <tbody class="list form-check-all">
-                                    @foreach ($strategies as $key => $strategy)
-                                        @if ($strategy['type'] == 2 && $strategy['inProcess'] == 1)
+                                    @foreach ($historical as $key => $strategy)
+                                        @if ($strategy['type'] == 3)
                                             <tr>
                                                 <td class="id" style="display:none;"><a href="javascript:void(0);"
                                                         class="fw-medium link-primary">{{ $strategy['id'] }}</a>
                                                 </td>
                                                 <td class="pos">#</td>
-                                                <td class="name">
+                                                <td class="channel">
                                                     {{ $strategy['canal'] }}
                                                 </td>
-                                                <td class="email text-center">
+                                                <td>
                                                     {{ number_format($strategy['registros_unicos'], 0, ',', '.') }}</td>
-                                                <td class="email">
+                                                <td>
                                                     {{ number_format($strategy['registros_repetidos'], 0, ',', '.') }}</td>
-                                                <td class="email">{{ $strategy['onlyWhere'] }}</td>
-                                                <td class="email">
+                                                <td>{{ $strategy['onlyWhere'] }}</td>
+                                                <td class="activation">
                                                     {{ $strategy['activation_date'] === null ? 'Sin Activar' : date('d-m-Y', strtotime($strategy['activation_date'])) }}
                                                     {{ $strategy['activation_time'] === null ? 'Sin Activar' : date('G:i:m', strtotime($strategy['activation_time'])) }}
-                                                </td>
-                                                <td>
-                                                    <ul class="list-inline hstack gap-2 mb-0">
-                                                        <li class="list-inline-item" data-bs-toggle="tooltip"
-                                                            data-bs-trigger="hover" data-bs-placement="top" title="Stop">
-                                                            <a class="remove-item-btn" data-bs-toggle="modal"
-                                                                href="#">
-                                                                <i class="ri-stop-circle-line align-bottom text-muted"></i>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
                                                 </td>
                                             </tr>
                                         @endif
                                     @endforeach
                                 <tfoot>
-                                    <tr class="text-center">
+                                    <tr>
                                         <td colspan="2">&nbsp;</td>
+                                        <td scope="col">
+                                            <strong>{{ number_format($porcentaje_total, 2, ',', '.') }}</strong>
+                                        </td>
                                         <td scope="col">
                                             <strong>{{ number_format($suma_total, 0, ',', '.') }}</strong>
                                         </td>
-                                        <td colspan="4">&nbsp;</td>
+                                        <td colspan="3">&nbsp;</td>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -130,11 +107,4 @@
                 </div>
             </div>
         </div>
-    @endsection
-    @section('script')
-        <script src="{{ URL::asset('build/libs/list.js/list.min.js') }}"></script>
-        <script src="{{ URL::asset('build/libs/list.pagination.js/list.pagination.min.js') }}"></script>
-        <script src="{{ URL::asset('build/js/pages/crm-companies.init.js') }}"></script>
-        <script src="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.js') }}"></script>
-        <script src="{{ URL::asset('build/js/app.js') }}"></script>
     @endsection

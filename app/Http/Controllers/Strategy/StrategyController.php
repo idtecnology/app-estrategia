@@ -36,7 +36,7 @@ class StrategyController extends Controller
                 }
 
 
-                if ($data['type'] === 2) {
+                if ($data['type'] === 2 && $data['inProcess'] == 1) {
                     if ($data['repeatUsers'] === 0) {
                         $suma_total += $data['registros_unicos'];
                     } else {
@@ -45,20 +45,7 @@ class StrategyController extends Controller
                     $porcentaje_total += $data['cobertura'];
                 }
             }
-
-            if ($channels_config['channels'] != null) {
-                if ($data['type'] === 0) {
-                    $key_active_channels = array_keys($channels_config['channels']);
-                    $ch_approve = array_diff($key_active_channels, $channels);
-                } else {
-                    $ch_approve = array_keys($channels_config['channels']);
-                }
-            }
         }
-
-
-
-        // return $data_client['client'];
 
         $data_client = [
             'prefix_client' => $data_client['client']['prefix'],
@@ -67,10 +54,10 @@ class StrategyController extends Controller
 
         // return $strategies;
 
-        return view('strategy.index', compact('strategies', 'data_client'));
+        return view('strategy.index', compact('strategies', 'data_client', 'suma_total', 'porcentaje_total'));
     }
 
-    protected static function getClientData($prefix)
+    protected static function getClientData($prefix, $diseno = false)
     {
         $clients = Http::get(env('API_URL') . env('API_CLIENTS') . '/' . auth()->user()->empresa_id)->collect()[0];
         $client = [];
@@ -85,7 +72,7 @@ class StrategyController extends Controller
             $pool->as('structure_client')->get(env('API_URL') .  env('API_ESTRUCTURA') . '/' . $client['id']),
             $pool->as('listas')->get(env('API_URL') . '/listasdiscador/' . $client['prefix']),
             $pool->as('channels')->get(env('API_URL') . env('API_CHANNELS')),
-            $pool->as('stategies')->get(env('API_URL') . env('API_ESTRATEGIAS') . '/diseno/' . strtoupper($client['prefix'])),
+            $diseno === true ? $pool->as('stategies')->get(env('API_URL') . env('API_ESTRATEGIAS') . '/diseno/' . strtoupper($client['prefix'])) : '',
         ]);
 
         return [
@@ -93,7 +80,7 @@ class StrategyController extends Controller
             'structure_client' => $responses['structure_client']->json()[0],
             'listas' => $responses['listas']->json()[0],
             'channels' => $responses['channels']->json()[0],
-            'stategies' => $responses['stategies']->json()[0],
+            'stategies' => $diseno === true ? $responses['stategies']->json()[0] : [],
         ];
     }
 
@@ -108,7 +95,7 @@ class StrategyController extends Controller
 
 
         //Datos del cliente
-        $data_client = self::getClientData($id);
+        $data_client = self::getClientData($id, true);
 
 
         $client = $data_client['client'];
@@ -137,14 +124,10 @@ class StrategyController extends Controller
             unset($d3['registros']);
         }
 
-        // return $datas;
-
-        // return $lista_discadores;
-
         if (count($datas) > 0) {
             $canales = [];
             foreach ($datas as $key => $data) {
-                if ($data['type'] === 0) {
+                if ($data['type'] === 1) {
                     $canales[] = $data['channels'];
                 }
 
@@ -159,7 +142,7 @@ class StrategyController extends Controller
                 }
 
                 if ($channels_config != null) {
-                    if ($data['type'] === 0) {
+                    if ($data['type'] === 1) {
                         $key_active_channels = array_keys($channels_config['channels']);
                         $ch_approve = array_diff($key_active_channels, $canales);
                     } else {
@@ -167,7 +150,7 @@ class StrategyController extends Controller
                     }
                 }
 
-                if ($data['type'] === 0) {
+                if ($data['type'] === 1) {
                     if ($data['repeatUsers'] === 0) {
                         $suma_total += $data['registros_unicos'];
                     } else {
@@ -195,7 +178,7 @@ class StrategyController extends Controller
 
         // return $request->;
 
-        $data_client = self::getClientData($request->prefix);
+        $data_client = self::getClientData($request->prefix, true);
 
 
         $estrategias_cache = $data_client['stategies'];
@@ -375,5 +358,53 @@ class StrategyController extends Controller
 
         $actived = Http::put(env('API_URL') . env('API_ESTRATEGIA') . "/activar/" . $request->id);
         return ['message' => 'Puesto en produccion', 'result' => $actived['status']];
+    }
+
+    public function history($client, $type)
+    {
+        $param = ["prefix" => $client, "type" => $type];
+        $historical = Http::withBody(json_encode($param))->get(env('API_URL') . env('API_ESTRATEGIA') . "/tipo", $param)->json()[0];
+
+        $data_client = self::getClientData($client, false);
+        $channels = $data_client['channels'];
+        $channels_config = json_decode($data_client['client']['channels'], true);
+
+        $total_cartera = 0;
+        $suma_total = 0;
+        $porcentaje_total = 0;
+
+        foreach ($historical as &$d3) {
+            unset($d3['registros']);
+        }
+
+
+        $data_counter = count($historical);
+
+        if ($data_counter > 0) {
+            foreach ($historical as $key => $data) {
+                if (isset($channels[$data['channels']])) {
+                    $historical[$key]['canal'] = strtoupper($channels[$data['channels']]['name']);
+                }
+
+
+                if ($data['type'] === 3 && $data['inProcess'] == 2) {
+                    if ($data['repeatUsers'] === 0) {
+                        $suma_total += $data['registros_unicos'];
+                    } else {
+                        $suma_total += $data['total_registros'];
+                    }
+                    $porcentaje_total += $data['cobertura'];
+                }
+            }
+        }
+
+        $data_client = [
+            'prefix_client' => $data_client['client']['prefix'],
+            'client_id' => $data_client['client']['id']
+        ];
+
+        // return $historical;
+
+        return view('strategy.history', compact('historical', 'data_client', 'suma_total', 'porcentaje_total'));
     }
 }

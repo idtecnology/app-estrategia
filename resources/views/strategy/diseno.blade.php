@@ -11,7 +11,7 @@
             Estrategias
         @endslot
         @slot('title')
-            diseño
+            Diseñar {{ $client['prefix'] }}
         @endslot
     @endcomponent
     <div class="row">
@@ -19,11 +19,12 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="d-flex align-items-center flex-wrap gap-2">
-                        <div class="ms-auto">
-                            <button class="btn btn-info add-btn" data-bs-toggle="modal" onclick="resetModal()"
-                                data-bs-target="#showModal"><i class="ri-add-fill me-1 align-bottom"></i> Diseñar
-                                estrategia</button>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <a href="{{ route('strategy.show', $client['prefix']) }}" class="btn btn-dark">
+                                <i class="ri-arrow-left-line me-1 align-bottom"></i>
+                                Regresar
+                            </a>
                         </div>
                     </div>
                 </div>

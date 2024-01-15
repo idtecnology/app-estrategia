@@ -19,15 +19,26 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="d-flex align-items-center flex-wrap gap-2">
-                        <div class="flex-grow-1">
-                            <a href="<?php echo e(route('strategy.desing', $data_client['prefix_client'])); ?>"
-                                class="btn btn-info add-btn">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <a href="<?php echo e(route('clients.index')); ?>" class="btn btn-dark">
+                                <i class="ri-arrow-left-line me-1 align-bottom"></i>
+                                Regresar
+                            </a>
+                        </div>
+                        <div class="col-md-auto ms-auto">
+                            <a href="<?php echo e(route('strategy.history', [$data_client['prefix_client'], 3])); ?>"
+                                class="btn btn-outline-danger">
+                                <i class="ri-history-line me-1 align-bottom"></i>
+                                Histórico
+                            </a>
+                        </div>
+                        <div class="col-md-auto">
+                            <a href="<?php echo e(route('strategy.desing', $data_client['prefix_client'])); ?>" class="btn btn-info">
                                 <i class="ri-pencil-ruler-2-line me-1 align-bottom"></i>
                                 Diseñar
                             </a>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -65,7 +76,7 @@
 
                                         <th class="sort" data-sort="pos" scope="col">#</th>
                                         <th class="sort" data-sort="name" scope="col">Canal</th>
-                                        <th class="sort" data-sort="email" scope="col">Registros</th>
+                                        <th class="sort text-center" data-sort="email" scope="col">Registros</th>
                                         <th class="sort" data-sort="email" scope="col">Repetidos</th>
                                         <th class="sort" data-sort="email" scope="col">Criterio</th>
                                         <th class="sort" data-sort="email" scope="col">Activacion</th>
@@ -84,7 +95,7 @@
                                                     <?php echo e($strategy['canal']); ?>
 
                                                 </td>
-                                                <td class="email">
+                                                <td class="email text-center">
                                                     <?php echo e(number_format($strategy['registros_unicos'], 0, ',', '.')); ?></td>
                                                 <td class="email">
                                                     <?php echo e(number_format($strategy['registros_repetidos'], 0, ',', '.')); ?></td>
@@ -109,6 +120,15 @@
                                             </tr>
                                         <?php endif; ?>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <tfoot>
+                                    <tr class="text-center">
+                                        <td colspan="2">&nbsp;</td>
+                                        <td scope="col">
+                                            <strong><?php echo e(number_format($suma_total, 0, ',', '.')); ?></strong>
+                                        </td>
+                                        <td colspan="4">&nbsp;</td>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>

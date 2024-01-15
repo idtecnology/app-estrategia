@@ -35,6 +35,7 @@ Route::group(['middleware' => ['auth']], function () {
     route::post('/strategy/test-strategy', [StrategyController::class, 'testStrategy'])->name('strategy.test-strategy');
     Route::post('/strategy/save-strategy', [StrategyController::class, 'saveStrategy'])->name('strategy.save-strategy');
     route::post('/strategy/accepted-strategy', [StrategyController::class, 'acceptedStrategy'])->name('strategy.accepted-strategy');
+    route::get('/strategy/history/{client}/{history}', [StrategyController::class, 'history'])->name('strategy.history');
 });
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'root'])->name('root');
