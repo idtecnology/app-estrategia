@@ -72,7 +72,7 @@
                                 </thead>
                                 <tbody class="list form-check-all">
                                     @foreach ($strategies as $key => $strategy)
-                                        @if ($strategy['type'] == 2 && date('Y-m-d', strtotime($strategy['activation_date'])) > '2024-01-01')
+                                        @if ($strategy['type'] == 2 && $strategy['inProcess'] == 1)
                                             <tr>
                                                 <td class="id" style="display:none;"><a href="javascript:void(0);"
                                                         class="fw-medium link-primary">{{ $strategy['id'] }}</a>

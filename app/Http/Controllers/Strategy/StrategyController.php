@@ -13,7 +13,7 @@ class StrategyController extends Controller
 
     public function show($id)
     {
-        $strategies = Http::timeout(120)->get(env('API_URL') . env('API_ESTRATEGIAS') . '/' . strtoupper($id))->json()[0];
+        $strategies = Http::timeout(3600)->get(env('API_URL') . env('API_ESTRATEGIAS') . '/' . strtoupper($id))->json()[0];
         $data_client = self::getClientData($id);
         $channels = $data_client['channels'];
         $channels_config = json_decode($data_client['client']['channels'], true);
@@ -65,7 +65,7 @@ class StrategyController extends Controller
             'client_id' => $data_client['client']['id']
         ];
 
-        // return $strategies;
+        return $strategies;
 
         return view('strategy.index', compact('strategies', 'data_client'));
     }
