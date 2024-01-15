@@ -19,7 +19,8 @@
                 <div class="card-header">
                     <div class="d-flex align-items-center flex-wrap gap-2">
                         <div class="flex-grow-1">
-                            <a href="{{ route('strategy.desing', $data_client['prefix_client']) }}" class="btn btn-info add-btn">
+                            <a href="{{ route('strategy.desing', $data_client['prefix_client']) }}"
+                                class="btn btn-info add-btn">
                                 <i class="ri-pencil-ruler-2-line me-1 align-bottom"></i>
                                 Diseñar
                             </a>
@@ -71,7 +72,7 @@
                                 </thead>
                                 <tbody class="list form-check-all">
                                     @foreach ($strategies as $key => $strategy)
-                                        @if ($strategy['type'] == 2 && $strategy['inProcess'] == 1)
+                                        @if ($strategy['type'] == 2 && date('Y-m-d', strtotime($strategy['activation_date'])) > '2024-01-01')
                                             <tr>
                                                 <td class="id" style="display:none;"><a href="javascript:void(0);"
                                                         class="fw-medium link-primary">{{ $strategy['id'] }}</a>

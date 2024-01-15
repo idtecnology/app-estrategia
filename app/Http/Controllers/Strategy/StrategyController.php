@@ -373,7 +373,7 @@ class StrategyController extends Controller
     public function acceptedStrategy(Request $request)
     {
 
-        $actived = Http::put("http://api.estrategia:3000/api/v1/estrategia/activar/" . $request->id);
+        $actived = Http::put(env('API_URL') . env('API_ESTRATEGIA') . "/activar/" . $request->id);
         return ['message' => 'Puesto en produccion', 'result' => $actived['status']];
     }
 }
