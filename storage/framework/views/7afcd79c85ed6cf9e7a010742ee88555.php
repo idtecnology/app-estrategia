@@ -22,14 +22,19 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="d-flex align-items-center flex-wrap gap-2">
-                        <div class="flex-grow-1">
-                            <button type="submit" class="btn btn-info add-btn">
-                                <i class="ri-pencil-ruler-2-line me-1 align-bottom"></i>
-                                Guardae
+                    <div class="row">
+                        <div class="col-md-4">
+                            <a href="<?php echo e(route('clients.index')); ?>" class="btn btn-dark">
+                                <i class="ri-arrow-left-line me-1 align-bottom"></i>
+                                Regresar
+                            </a>
+                        </div>
+                        <div class="col-md-auto ms-auto">
+                            <button type="submit" class="btn btn-success add-btn">
+                                <i class="ri-save-2-line me-1 align-bottom"></i>
+                                Guardar
                             </button>
                         </div>
-
                     </div>
                 </div>
             </div>

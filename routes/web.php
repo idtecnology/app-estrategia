@@ -22,7 +22,7 @@ Auth::routes();
 //Language Translation
 Route::get('index/{locale}', [App\Http\Controllers\HomeController::class, 'lang']);
 
-Route::get('/login-api/{email}', [UserController::class, 'authApi']);
+Route::get('/login-api/{crm_id}', [UserController::class, 'authApi']);
 
 
 Route::group(['middleware' => ['auth']], function () {

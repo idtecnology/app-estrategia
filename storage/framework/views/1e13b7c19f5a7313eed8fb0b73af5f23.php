@@ -27,27 +27,24 @@
                                 Regresar
                             </a>
                         </div>
+                        <div class="col-md-auto ms-auto">
+                            <div class="d-flex align-items-center flex-wrap gap-2">
+                                <div class="ms-auto">
+                                    <button class="btn btn-info add-btn" data-bs-toggle="modal" onclick="resetModal()"
+                                        data-bs-target="#showModal"><i class="ri-add-fill me-1 align-bottom"></i> Crear
+                                        estrategia</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="col-xxl-12">
-            <div class="card" id="companyList">
+            <div class="card">
                 <div class="card-header">
-                    <div class="row g-2">
-                        <div class="col-md-4 ms-auto">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="text-muted">Ordenar por: </span>
-                                <select class="form-control mb-0" data-choices data-choices-search-false
-                                    id="choices-single-default">
-                                    <option value="pos">Posicion</option>
-                                    <option value="canal">Canal</option>
-                                    <option value="registros">Registros</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+                    
                 </div>
                 <div class="card-body">
                     <div>
@@ -56,10 +53,13 @@
                                 <thead class="table-light">
                                     <tr>
                                         <th width="4%" class="sort" data-sort="pos" scope="col">#</th>
-                                        <th width="9%" class="sort" data-sort="canal" scope="col">Canal</th>
-                                        <th width="9%" class="sort" data-sort="lista" scope="col">Lista</th>
+                                        <th width="9%" class="sort" data-sort="canal" scope="col">Canal
+                                        </th>
+                                        <th width="9%" class="sort" data-sort="lista" scope="col">Lista
+                                        </th>
                                         <th width="9%" class="sort" scope="col">Cobertura</th>
-                                        <th width="9%" class="sort" data-sort="registros" scope="col">Registros
+                                        <th width="9%" class="sort" data-sort="registros" scope="col">
+                                            Registros
                                         </th>
                                         <th width="9%" class="sort" scope="col">Repetidos</th>
                                         <th class="sort" scope="col">Criterio</th>
@@ -79,7 +79,9 @@
                                                 <td><?php echo e(number_format($data['cobertura'], 2, ',', '.')); ?>%</td>
                                                 <td class="registros">
                                                     <?php echo e(number_format($data['registros_unicos'], 0, ',', '.')); ?></td>
-                                                <td><?php echo e(number_format($data['registros_repetidos'], 0, ',', '.')); ?></td>
+                                                <td><?php echo e(number_format($data['registros_repetidos'], 0, ',', '.')); ?>
+
+                                                </td>
                                                 <td><?php echo e($data['onlyWhere']); ?></td>
                                                 <td class="text-center">
                                                     <a type="button" class="btn btn-success btn-sm" id='btnActivate'

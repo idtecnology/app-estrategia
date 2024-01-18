@@ -42,9 +42,9 @@
             </div>
         </div>
         <div class="col-xxl-12">
-            <div class="card" id="companyList">
+            <div class="card">
                 <div class="card-header">
-                    <div class="row g-2">
+                    {{-- <div class="row g-2">
                         <div class="col-md-3">
                             <div class="search-box">
                                 <input type="text" class="form-control search" placeholder="Buscar usuario...">
@@ -63,7 +63,7 @@
                                 </select>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="card-body">
                     <div>
@@ -130,11 +130,4 @@
                 </div>
             </div>
         </div>
-    @endsection
-    @section('script')
-        <script src="{{ URL::asset('build/libs/list.js/list.min.js') }}"></script>
-        <script src="{{ URL::asset('build/libs/list.pagination.js/list.pagination.min.js') }}"></script>
-        <script src="{{ URL::asset('build/js/pages/crm-companies.init.js') }}"></script>
-        <script src="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.js') }}"></script>
-        <script src="{{ URL::asset('build/js/app.js') }}"></script>
     @endsection

@@ -16,9 +16,9 @@
     <div class="row">
 
         <div class="col-xxl-12">
-            <div class="card" id="companyList">
+            <div class="card">
                 <div class="card-header">
-                    <div class="row g-2">
+                    {{-- <div class="row g-2">
                         <div class="col-md-3">
                             <div class="search-box">
                                 <input type="text" class="form-control search" placeholder="Buscar usuario...">
@@ -37,7 +37,7 @@
                                 </select>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="card-body">
                     <div>
@@ -77,13 +77,13 @@
                                                         <a href="{{ route('clients.edit', $client['id']) }}"><i
                                                                 class="ri-pencil-fill align-bottom text-muted"></i></a>
                                                     </li>
-                                                    <li class="list-inline-item" data-bs-toggle="tooltip"
+                                                    {{-- <li class="list-inline-item" data-bs-toggle="tooltip"
                                                         data-bs-trigger="hover" data-bs-placement="top" title="Delete">
                                                         <a class="remove-item-btn" data-bs-toggle="modal"
                                                             href="#deleteRecordModal">
                                                             <i class="ri-delete-bin-fill align-bottom text-muted"></i>
                                                         </a>
-                                                    </li>
+                                                    </li> --}}
                                                 </ul>
                                             </td>
                                         </tr>
@@ -96,11 +96,4 @@
             </div>
             @include('configuration.users.modals.create')
         </div>
-    @endsection
-    @section('script')
-        <script src="{{ URL::asset('build/libs/list.js/list.min.js') }}"></script>
-        <script src="{{ URL::asset('build/libs/list.pagination.js/list.pagination.min.js') }}"></script>
-        <script src="{{ URL::asset('build/js/pages/crm-companies.init.js') }}"></script>
-        <script src="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.js') }}"></script>
-        <script src="{{ URL::asset('build/js/app.js') }}"></script>
     @endsection

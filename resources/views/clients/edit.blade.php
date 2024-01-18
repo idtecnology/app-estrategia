@@ -19,14 +19,19 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="d-flex align-items-center flex-wrap gap-2">
-                        <div class="flex-grow-1">
-                            <button type="submit" class="btn btn-info add-btn">
-                                <i class="ri-pencil-ruler-2-line me-1 align-bottom"></i>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <a href="{{ route('clients.index') }}" class="btn btn-dark">
+                                <i class="ri-arrow-left-line me-1 align-bottom"></i>
+                                Regresar
+                            </a>
+                        </div>
+                        <div class="col-md-auto ms-auto">
+                            <button type="submit" class="btn btn-success add-btn">
+                                <i class="ri-save-2-line me-1 align-bottom"></i>
                                 Guardar
                             </button>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -165,12 +170,6 @@
         {!! Form::close() !!}
     @endsection
     @section('script')
-        <script src="{{ URL::asset('build/libs/list.js/list.min.js') }}"></script>
-        <script src="{{ URL::asset('build/libs/list.pagination.js/list.pagination.min.js') }}"></script>
-        <script src="{{ URL::asset('build/js/pages/crm-companies.init.js') }}"></script>
-        <script src="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.js') }}"></script>
-        <script src="{{ URL::asset('build/js/app.js') }}"></script>
-
         <script>
             function enableRadio(element, c) {
                 var check_tipo = document.getElementById("check_tipo_" + c)

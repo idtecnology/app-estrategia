@@ -176,7 +176,6 @@ class StrategyController extends Controller
     public function testStrategy(Request $request)
     {
 
-        // return $request->;
 
         $data_client = self::getClientData($request->prefix, true);
 
@@ -199,12 +198,13 @@ class StrategyController extends Controller
             "criterio" => $request['query'],
             "template" => $request->template,
             "canal" => $request->channel,
+            "rut" => $data_client['structure_client'][0]['COLUMN_NAME']
         ];
 
-        // return $param;
+        return $param;
 
 
-        $result_query = Http::post(env('API_URL') . env('API_ESTRATEGIA') . "/records", $param);
+        return $result_query = Http::post(env('API_URL') . env('API_ESTRATEGIA') . "/records", $param);
 
         if ($result_query == 'false') {
             return response()->json(['error' => 'Error de timeout', 'param' => $param], 404);

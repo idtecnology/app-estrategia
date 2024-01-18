@@ -44,28 +44,9 @@
             </div>
         </div>
         <div class="col-xxl-12">
-            <div class="card" id="companyList">
+            <div class="card">
                 <div class="card-header">
-                    <div class="row g-2">
-                        <div class="col-md-3">
-                            <div class="search-box">
-                                <input type="text" class="form-control search" placeholder="Buscar usuario...">
-                                <i class="ri-search-line search-icon"></i>
-                            </div>
-                        </div>
-                        <div class="col-md-auto ms-auto">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="text-muted">Ordenar por: </span>
-                                <select class="form-control mb-0" data-choices data-choices-search-false
-                                    id="choices-single-default">
-                                    <option value="pos">Posicion</option>
-                                    <option value="email">Email</option>
-                                    <option value="name">Nombre</option>
-                                    <option value="roles">Rol</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+                    
                 </div>
                 <div class="card-body">
                     <div>

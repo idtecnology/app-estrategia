@@ -159,9 +159,9 @@ class UserController extends Controller
             ->with('success', 'User deleted successfully');
     }
 
-    public function authApi($email)
+    public function authApi($crm_id)
     {
-        $user = User::where('email', $email)->first();
+        $user = User::where('crm_id', $crm_id)->first();
 
         if ($user) {
             Auth::login($user);
@@ -174,6 +174,23 @@ class UserController extends Controller
     public function storeUsers(Request $request)
     {
 
+        $user = User::where('crm_id', $request->crm_id)->first();
+
+        if ($user) {
+            return response()->json(['status' => 'error', 'message' => 'El usuario, ya existe'], 400);
+        } else {
+            $input = $request->all();
+            $input['password'] = Hash::make($input['password']);
+            $user = User::create($input);
+            $user->assignRole($request->input('roles'));
+            return response()->json(['message' => 'exito',], 200);
+        }
+    }
+
+
+    public function updateUsers(Request $request)
+    {
+
         $user = User::where('email', $request->email)->first();
 
         if ($user) {
@@ -181,8 +198,7 @@ class UserController extends Controller
         } else {
             $input = $request->all();
             $input['password'] = Hash::make($input['password']);
-            $user = User::create($input);
-            $user->assignRole($request->input('roles'));
+            $user = User::update($input);
             return response()->json(['message' => 'exito',], 200);
         }
     }
