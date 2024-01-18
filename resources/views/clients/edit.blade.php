@@ -48,7 +48,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-8">
             <div class="card" id="">
                 <div class="card-header">
                     <h3>Canales</h3>
@@ -64,25 +64,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($channels as $k => $value)
+                                    @foreach ($channels_config['channels'] as $k => $value)
                                         <tr>
                                             <td>
-                                                {{ Form::checkbox('configuracion[channels][' . $k . '][seleccionado]', $k, isset($channels_config['channels'][$k]) ? true : false, ['id' => 'checkbox_' . $k, 'class' => 'name form-check-input', 'onchange' => 'enableRadio(this, ' . $k . ')']) }}
                                                 <label for="checkbox_{{ $k }}"
-                                                    class="form-check-label">{{ strtoupper($value['name']) }}</label>
+                                                    class="form-check-label">{{ strtoupper($channels[$k]['name']) }}</label>
                                             </td>
                                             <td>
-                                                {{ Form::checkbox(
-                                                    'configuracion[channels][' . $k . '][tipo]',
-                                                    $k . '_1',
-                                                    isset($channels_config['channels'][$k]['tipo']) ? true : false,
-                                                    [
-                                                        'class' => 'name form-check-input',
-                                                        'id' => 'check_tipo_' . $k,
-                                                        'disabled' => isset($channels_config['channels'][$k]['seleccionado']) ? false : true,
-                                                    ],
-                                                ) }}
-                                                <label class="form-check-label">Masivo</label>
+                                                {{ isset($value['tipo']) ? 'Masivo' : '' }}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -94,7 +83,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="card" id="">
                 <div class="card-header">
                     <h3>Estructura</h3>
@@ -105,68 +94,14 @@
                             <table class="table table-bordered table-sm mb-0">
                                 <thead class="table-dark text-uppercase text-center">
                                     <tr>
-                                        <th>Campo BD</th>
+
                                         <th>Nombre</th>
-                                        <th width='10%'>Seleccionar</th>
                                     </tr>
                                 </thead>
                                 <tbody class="align-middle">
-
-                                    @foreach ($estructura as $ke => $estruc)
+                                    @foreach ($est2 as $campo)
                                         <tr>
-                                            <td>
-                                                {{ $estruc['COLUMN_NAME'] }}
-                                            </td>
-                                            <td>
-                                                @if (isset($channels_config['estructura']))
-                                                    @if (in_array($estruc['COLUMN_NAME'], array_keys($channels_config['estructura'])))
-                                                        @if (isset($channels_config['estructura'][$estruc['COLUMN_NAME']]['utilizar']))
-                                                            <input class="form-control form-control-sm"
-                                                                placeholder="Ingrese un nombre" type="text"
-                                                                name="configuracion[estructura][{{ $estruc['COLUMN_NAME'] }}][nombre]"
-                                                                value="{{ $channels_config['estructura'][$estruc['COLUMN_NAME']]['nombre'] }}" />
-                                                        @else
-                                                            <input type="text" placeholder="Ingrese un nombre"
-                                                                class="form-control form-control-sm"
-                                                                name="configuracion[estructura][{{ $estruc['COLUMN_NAME'] }}][nombre]" />
-                                                        @endif
-                                                    @else
-                                                        <input type="text" placeholder="Ingrese un nombre"
-                                                            class="form-control form-control-sm"
-                                                            name="configuracion[estructura][{{ $estruc['COLUMN_NAME'] }}][nombre]" />
-                                                    @endif
-                                                @else
-                                                    <input class="form-control form-control-sm"
-                                                        placeholder="Ingrese un nombre" type="text"
-                                                        name="configuracion[estructura][{{ $estruc['COLUMN_NAME'] }}][nombre]" />
-                                                @endif
-
-                                            </td>
-
-                                            <td class="text-center">
-
-                                                @if (isset($channels_config['estructura']))
-                                                    @if (in_array($estruc['COLUMN_NAME'], array_keys($channels_config['estructura'])))
-                                                        @if (isset($channels_config['estructura'][$estruc['COLUMN_NAME']]['utilizar']))
-                                                            <input type="checkbox"
-                                                                name="configuracion[estructura][{{ $estruc['COLUMN_NAME'] }}][utilizar]"
-                                                                checked
-                                                                value="{{ $channels_config['estructura'][$estruc['COLUMN_NAME']]['utilizar'] }}" />
-                                                        @else
-                                                            <input type="checkbox"
-                                                                name="configuracion[estructura][{{ $estruc['COLUMN_NAME'] }}][utilizar]" />
-                                                        @endif
-                                                    @else
-                                                        <input type="checkbox"
-                                                            name="configuracion[estructura][{{ $estruc['COLUMN_NAME'] }}][utilizar]" />
-                                                    @endif
-                                                @else
-                                                    <input type="checkbox"
-                                                        name="configuracion[estructura][{{ $estruc['COLUMN_NAME'] }}][utilizar]" />
-                                                @endif
-                                                {{-- <input type="checkbox"
-                                    name="configuracion[estructura][{{ $estruc['COLUMN_NAME'] }}][utilizar]" /> --}}
-                                            </td>
+                                            <td>{{ $campo }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>

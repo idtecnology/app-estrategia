@@ -24,9 +24,21 @@ class ClientController extends Controller
         $channels_config = json_decode($client['channels'], true);
         $listas = Http::get(env('API_URL') . '/listas-discador/' . $client['prefix'])->json(0);
 
+
+        $est = array_values($channels_config['estructura']);
+        $est2 = [];
+
+        for ($i = 0; $i < count($est); $i++) {
+            if (array_key_exists('utilizar', $est[$i])) {
+                $est2[] = $est[$i]['nombre'];
+            }
+        }
+
+        // return $est2;
+
         $emailsTemplates = EmailTemplateController::getEmailTemplates($client['prefix']);
 
-        return view('clients.edit', compact('client', 'estructura', 'channels', 'channels_config', 'emailsTemplates', 'listas'));
+        return view('clients.edit', compact('est2', 'client', 'estructura', 'channels', 'channels_config', 'emailsTemplates', 'listas'));
         return $channels_config;
     }
 

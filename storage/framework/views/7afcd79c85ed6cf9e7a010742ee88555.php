@@ -50,7 +50,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-8">
             <div class="card" id="">
                 <div class="card-header">
                     <h3>Canales</h3>
@@ -66,27 +66,15 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php $__currentLoopData = $channels; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <?php $__currentLoopData = $channels_config['channels']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr>
                                             <td>
-                                                <?php echo e(Form::checkbox('configuracion[channels][' . $k . '][seleccionado]', $k, isset($channels_config['channels'][$k]) ? true : false, ['id' => 'checkbox_' . $k, 'class' => 'name form-check-input', 'onchange' => 'enableRadio(this, ' . $k . ')'])); ?>
-
                                                 <label for="checkbox_<?php echo e($k); ?>"
-                                                    class="form-check-label"><?php echo e(strtoupper($value['name'])); ?></label>
+                                                    class="form-check-label"><?php echo e(strtoupper($channels[$k]['name'])); ?></label>
                                             </td>
                                             <td>
-                                                <?php echo e(Form::checkbox(
-                                                    'configuracion[channels][' . $k . '][tipo]',
-                                                    $k . '_1',
-                                                    isset($channels_config['channels'][$k]['tipo']) ? true : false,
-                                                    [
-                                                        'class' => 'name form-check-input',
-                                                        'id' => 'check_tipo_' . $k,
-                                                        'disabled' => isset($channels_config['channels'][$k]['seleccionado']) ? false : true,
-                                                    ],
-                                                )); ?>
+                                                <?php echo e(isset($value['tipo']) ? 'Masivo' : ''); ?>
 
-                                                <label class="form-check-label">Masivo</label>
                                             </td>
                                         </tr>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -98,7 +86,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="card" id="">
                 <div class="card-header">
                     <h3>Estructura</h3>
@@ -109,68 +97,14 @@
                             <table class="table table-bordered table-sm mb-0">
                                 <thead class="table-dark text-uppercase text-center">
                                     <tr>
-                                        <th>Campo BD</th>
+
                                         <th>Nombre</th>
-                                        <th width='10%'>Seleccionar</th>
                                     </tr>
                                 </thead>
                                 <tbody class="align-middle">
-
-                                    <?php $__currentLoopData = $estructura; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ke => $estruc): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <?php $__currentLoopData = $est2; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $campo): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr>
-                                            <td>
-                                                <?php echo e($estruc['COLUMN_NAME']); ?>
-
-                                            </td>
-                                            <td>
-                                                <?php if(isset($channels_config['estructura'])): ?>
-                                                    <?php if(in_array($estruc['COLUMN_NAME'], array_keys($channels_config['estructura']))): ?>
-                                                        <?php if(isset($channels_config['estructura'][$estruc['COLUMN_NAME']]['utilizar'])): ?>
-                                                            <input class="form-control form-control-sm"
-                                                                placeholder="Ingrese un nombre" type="text"
-                                                                name="configuracion[estructura][<?php echo e($estruc['COLUMN_NAME']); ?>][nombre]"
-                                                                value="<?php echo e($channels_config['estructura'][$estruc['COLUMN_NAME']]['nombre']); ?>" />
-                                                        <?php else: ?>
-                                                            <input type="text" placeholder="Ingrese un nombre"
-                                                                class="form-control form-control-sm"
-                                                                name="configuracion[estructura][<?php echo e($estruc['COLUMN_NAME']); ?>][nombre]" />
-                                                        <?php endif; ?>
-                                                    <?php else: ?>
-                                                        <input type="text" placeholder="Ingrese un nombre"
-                                                            class="form-control form-control-sm"
-                                                            name="configuracion[estructura][<?php echo e($estruc['COLUMN_NAME']); ?>][nombre]" />
-                                                    <?php endif; ?>
-                                                <?php else: ?>
-                                                    <input class="form-control form-control-sm"
-                                                        placeholder="Ingrese un nombre" type="text"
-                                                        name="configuracion[estructura][<?php echo e($estruc['COLUMN_NAME']); ?>][nombre]" />
-                                                <?php endif; ?>
-
-                                            </td>
-
-                                            <td class="text-center">
-
-                                                <?php if(isset($channels_config['estructura'])): ?>
-                                                    <?php if(in_array($estruc['COLUMN_NAME'], array_keys($channels_config['estructura']))): ?>
-                                                        <?php if(isset($channels_config['estructura'][$estruc['COLUMN_NAME']]['utilizar'])): ?>
-                                                            <input type="checkbox"
-                                                                name="configuracion[estructura][<?php echo e($estruc['COLUMN_NAME']); ?>][utilizar]"
-                                                                checked
-                                                                value="<?php echo e($channels_config['estructura'][$estruc['COLUMN_NAME']]['utilizar']); ?>" />
-                                                        <?php else: ?>
-                                                            <input type="checkbox"
-                                                                name="configuracion[estructura][<?php echo e($estruc['COLUMN_NAME']); ?>][utilizar]" />
-                                                        <?php endif; ?>
-                                                    <?php else: ?>
-                                                        <input type="checkbox"
-                                                            name="configuracion[estructura][<?php echo e($estruc['COLUMN_NAME']); ?>][utilizar]" />
-                                                    <?php endif; ?>
-                                                <?php else: ?>
-                                                    <input type="checkbox"
-                                                        name="configuracion[estructura][<?php echo e($estruc['COLUMN_NAME']); ?>][utilizar]" />
-                                                <?php endif; ?>
-                                                
-                                            </td>
+                                            <td><?php echo e($campo); ?></td>
                                         </tr>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </tbody>
