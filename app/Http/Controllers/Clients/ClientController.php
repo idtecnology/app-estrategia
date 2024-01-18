@@ -51,4 +51,51 @@ class ClientController extends Controller
             return $updated;
         }
     }
+
+    private function getClientConfigChannelStructure($id)
+    {
+        $client = Http::get(env('API_URL') . env('API_CLIENT') . '/' . $id)->collect()[0][0];
+        return json_decode($client['channels'], true);
+    }
+
+    public function editChannels(Request $request)
+    {
+
+        $channels_config = self::getClientConfigChannelStructure($request->client_id);
+
+        $channels_config["channels"] = $request->configuracion['channels'];
+        $update = [];
+        $update['idClient'] = intval($request->client_id);
+        $update['channels'] = json_encode($channels_config, JSON_FORCE_OBJECT);
+        // return $update;
+
+        // return $update;
+        $updated = Http::put(env('API_URL') . env('API_CLIENT') . "/canales", $update);
+
+        if ($updated != 'false') {
+            return redirect(route('clients.edit', $request->client_id));
+        } else {
+            return $updated;
+        }
+    }
+
+    public function editStructure(Request $request)
+    {
+        $channels_config = self::getClientConfigChannelStructure($request->client_id);
+
+        $channels_config["estructura"] = $request->configuracion['estructura'];
+        $update = [];
+        $update['idClient'] = intval($request->client_id);
+        $update['channels'] = json_encode($channels_config, JSON_FORCE_OBJECT);
+        // return $update;
+
+        // return $update;
+        $updated = Http::put(env('API_URL') . env('API_CLIENT') . "/canales", $update);
+
+        if ($updated != 'false') {
+            return redirect(route('clients.edit', $request->client_id));
+        } else {
+            return $updated;
+        }
+    }
 }

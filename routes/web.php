@@ -40,7 +40,9 @@ Route::group(['middleware' => ['auth']], function () {
     route::post('/strategy/accepted-strategy', [StrategyController::class, 'acceptedStrategy'])->name('strategy.accepted-strategy');
     route::get('/strategy/history/{client}/{history}', [StrategyController::class, 'history'])->name('strategy.history');
 
-
+    //Clients
+    Route::post('/clients/edit-channels', [ClientController::class, 'editChannels'])->name('clients.edit-channels');
+    Route::post('/clients/edit-structure', [ClientController::class, 'editStructure'])->name('clients.edit-structure');
 
     // Configurations
     // Mails

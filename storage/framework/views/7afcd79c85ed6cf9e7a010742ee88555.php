@@ -35,20 +35,16 @@
                                 plantilla email</button>
                         </div>
                         <div class="col-md-auto">
-                            <button class="btn btn-soft-warning" data-bs-toggle="modal" data-bs-target="#showModal"><i
+                            <button class="btn btn-soft-warning" data-bs-toggle="modal"
+                                data-bs-target="#showModalEditChannels"><i
                                     class="ri-customer-service-2-line me-1 align-bottom"></i> Editar
                                 canales</button>
                         </div>
                         <div class="col-md-auto">
-                            <button class="btn btn-soft-warning" data-bs-toggle="modal" data-bs-target="#showModal"><i
-                                    class="ri-table-line me-1 align-bottom"></i> Editar
+                            <button class="btn btn-soft-warning" data-bs-toggle="modal"
+                                data-bs-target="#showModalEditStructure"><i class="ri-table-line me-1 align-bottom"></i>
+                                Editar
                                 estructura</button>
-                        </div>
-                        <div class="col-md-auto">
-                            <button type="submit" class="btn btn-success add-btn">
-                                <i class="ri-save-2-line me-1 align-bottom"></i>
-                                Guardar
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -185,6 +181,8 @@
                 <?php echo $__env->make('clients.modals.create_mail', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                 <?php echo $__env->make('clients.modals.show_mail', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                 <?php echo $__env->make('clients.modals.edit_mail', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                <?php echo $__env->make('clients.modals.edit_channels', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                <?php echo $__env->make('clients.modals.edit_structure', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
             </div>
         </div>
 
