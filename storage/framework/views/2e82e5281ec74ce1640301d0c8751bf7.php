@@ -158,7 +158,6 @@
 
 
         function selectTemplate(select = '') {
-
             prefix = document.getElementById('prefix').value
             temp = document.getElementById('template')
             lblTemplate = document.getElementById('lblTemplate')
@@ -183,8 +182,6 @@
                     temp.appendChild(opcion);
                 }
                 temp.disabled = false;
-
-                console.log(objLista)
             } else {
                 temp.disabled = true;
                 temp.value = '';
