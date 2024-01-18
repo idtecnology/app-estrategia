@@ -173,6 +173,18 @@
                     temp.appendChild(opcion);
                 }
                 temp.disabled = false;
+            } else if (select.selectedOptions[0].text === 'EMAIL') {
+                objLista = <?php echo json_encode($template_client, 15, 512) ?>;
+                for (var clave in objLista) {
+                    var opcion = document.createElement("option");
+                    opcion.value = objLista[clave].id;
+                    opcion.text = objLista[clave].nombreTemplate
+                    lblTemplate.innerHTML = "Plantillas Email"
+                    temp.appendChild(opcion);
+                }
+                temp.disabled = false;
+
+                console.log(objLista)
             } else {
                 temp.disabled = true;
                 temp.value = '';
@@ -333,10 +345,10 @@
                     })
                     document.getElementById('cobertura').innerHTML =
                         `${data.percent_cober.toLocaleString("de-DE", opciones)}%`
-                    document.getElementById('unicos').innerHTML = data.total_unicos.toLocaleString("de-DE")
+                    document.getElementById('unicos').innerHTML = data.total_unicos
                     document.getElementById('repetidos').innerHTML = data.total_repetidos.toLocaleString(
                         "de-DE")
-                    document.getElementById('total').innerHTML = data.total_r.toLocaleString("de-DE")
+                    document.getElementById('total').innerHTML = data.total_r
                     document.getElementById('cober').value = data.percent_cober.toFixed(2)
                     document.getElementById('unic').value = data.total_unicos
                     document.getElementById('repe').value = data.total_repetidos
@@ -353,7 +365,7 @@
                     document.getElementById('repe').value = 0
                     document.getElementById('tota').value = 0
                     Swal.fire({
-                        title: 'Error',
+                        title: 'Error al probar la nueva estrategia.',
                         icon: 'error',
                         text: data.error,
                         showCloseButton: true

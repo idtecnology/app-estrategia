@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Clients\ClientController;
+use App\Http\Controllers\Configuration\EmailTemplateController;
 use App\Http\Controllers\Configuration\UserController;
 use App\Http\Controllers\RegisterUserController;
 use App\Http\Controllers\Strategy\StrategyController;
@@ -31,11 +32,21 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('/clients', ClientController::class);
     Route::resource('/strategy', StrategyController::class);
 
+
+    // Strategy
     Route::get('/strategy/desing/{id}', [StrategyController::class, 'desing'])->name('strategy.desing');
     route::post('/strategy/test-strategy', [StrategyController::class, 'testStrategy'])->name('strategy.test-strategy');
     Route::post('/strategy/save-strategy', [StrategyController::class, 'saveStrategy'])->name('strategy.save-strategy');
     route::post('/strategy/accepted-strategy', [StrategyController::class, 'acceptedStrategy'])->name('strategy.accepted-strategy');
     route::get('/strategy/history/{client}/{history}', [StrategyController::class, 'history'])->name('strategy.history');
+
+
+
+    // Configurations
+    // Mails
+    Route::resource('/configuration/emails', EmailTemplateController::class);
+    Route::post('/configuration/emails/get-template-id', [EmailTemplateController::class, 'getTemplateId'])->name('emails.get-template-id');
+    Route::post('/configuration/emails/update-template', [EmailTemplateController::class, 'updateTemplate'])->name('emails.update-template');
 });
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'root'])->name('root');

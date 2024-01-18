@@ -69,18 +69,20 @@ class StrategyController extends Controller
         }
 
         $responses = Http::pool(fn (Pool $pool) => [
+            $pool->as('template_client')->get(env('API_URL') . env('API_EMAIL') . "/template-client/{$prefix}"),
             $pool->as('structure_client')->get(env('API_URL') .  env('API_ESTRUCTURA') . '/' . $client['id']),
-            $pool->as('listas')->get(env('API_URL') . '/listasdiscador/' . $client['prefix']),
+            $pool->as('listas')->get(env('API_URL') . '/listas-discador/' . $client['prefix']),
             $pool->as('channels')->get(env('API_URL') . env('API_CHANNELS')),
             $diseno === true ? $pool->as('stategies')->get(env('API_URL') . env('API_ESTRATEGIAS') . '/diseno/' . strtoupper($client['prefix'])) : '',
         ]);
 
         return [
             'client' => $client,
-            'structure_client' => $responses['structure_client']->json()[0],
-            'listas' => $responses['listas']->json()[0],
-            'channels' => $responses['channels']->json()[0],
-            'stategies' => $diseno === true ? $responses['stategies']->json()[0] : [],
+            'structure_client' => $responses['structure_client']->json(0),
+            'listas' => $responses['listas']->json(0),
+            'channels' => $responses['channels']->json(0),
+            'template_client' => $responses['template_client']->json(0),
+            'stategies' => $diseno === true ? $responses['stategies']->json(0) : [],
         ];
     }
 
@@ -103,6 +105,7 @@ class StrategyController extends Controller
         $channels_config = json_decode($data_client['client']['channels'], true);
         $estructura = $data_client['structure_client'];
         $lista_discadores = $data_client['listas'];
+        $template_client = $data_client['template_client'];
 
         $estrc = [];
         if (isset($channels_config['estructura'])) {
@@ -170,19 +173,20 @@ class StrategyController extends Controller
 
         // return $datas;
 
-        return view('strategy/diseno', compact('lista_discadores', 'client', 'datas', 'porcentaje_total',  'suma_total', 'channels', 'estrc', 'ch_approve', 'channels_config'));
+        return view('strategy/diseno', compact('template_client', 'lista_discadores', 'client', 'datas', 'porcentaje_total',  'suma_total', 'channels', 'estrc', 'ch_approve', 'channels_config'));
     }
 
     public function testStrategy(Request $request)
     {
 
+        $tipos_masivos = [];
+        $full_merge = [];
 
         $data_client = self::getClientData($request->prefix, true);
 
 
         $estrategias_cache = $data_client['stategies'];
         $config_channels = json_decode($data_client['client']['channels'], true);
-        $tipos_masivos = [];
 
         foreach ($config_channels['channels'] as $o => $value) {
             if (isset($value['tipo'])) {
@@ -190,88 +194,85 @@ class StrategyController extends Controller
             }
         }
 
-
-
         $param = [
             "idCliente" => $request->id_cliente,
             "cartera" => $request->table_name,
             "criterio" => $request['query'],
             "template" => $request->template,
             "canal" => $request->channel,
-            "rut" => $data_client['structure_client'][0]['COLUMN_NAME']
         ];
 
-        return $param;
+        try {
+            $result_query = Http::post(env('API_URL') . env('API_ESTRATEGIA') . "/records", $param);
 
+            if ($result_query) {
+                if ($result_query == 'false') {
+                    return response()->json(['error' => 'Error de timeout', 'param' => $param], 404);
+                }
 
-        return $result_query = Http::post(env('API_URL') . env('API_ESTRATEGIA') . "/records", $param);
+                $rst = json_decode($result_query, true);
+                if (array_key_exists('status', $rst)) {
 
-        if ($result_query == 'false') {
-            return response()->json(['error' => 'Error de timeout', 'param' => $param], 404);
-        }
+                    if ($rst['status'] == false) {
+                        return response()->json(['error' => "Error en la consulta por favor contacte a soporte tecnico, con el siguiente mensaje: \nError de tipo: Bases de datos\n Problema: Error en la consulta"], 404);
+                    }
+                }
+            }
 
-        $coleccion = $result_query->collect()[0];
-
-        // return $coleccion;
-
-        if ($coleccion[0]['total_records'] !== 0) {
+            $coleccion = $result_query->collect()[0];
             $response_ruts = array_values(json_decode($coleccion[0]['detail_records'], true));
-        } else {
-            return response()->json(['error' => 'No existen registros con ese criterio de busqueda'], 404);
-        }
 
-        // return $response_ruts;
-
-        $full_merge = [];
-
-        if (in_array($request->channel, $tipos_masivos)) {
-            for ($i = 0; $i < count($estrategias_cache); $i++) {
-                if (in_array($estrategias_cache[$i]['channels'], $tipos_masivos)) {
-                    $full_merge = array_merge($full_merge, json_decode($estrategias_cache[$i]['registros'], true));
+            if (in_array($request->channel, $tipos_masivos)) {
+                for ($i = 0; $i < count($estrategias_cache); $i++) {
+                    if (in_array($estrategias_cache[$i]['channels'], $tipos_masivos)) {
+                        $full_merge = array_merge($full_merge, json_decode($estrategias_cache[$i]['registros'], true));
+                    }
                 }
-            }
 
-            $unicos = array_diff($response_ruts, $full_merge);
-            $iguales = array_intersect($response_ruts, $full_merge);
+                $unicos = array_diff($response_ruts, $full_merge);
+                $iguales = array_intersect($response_ruts, $full_merge);
 
-            if (isset($request->check)) {
-                $cobertura = ($coleccion[0]['total_records'] / $coleccion[0]['total_cartera']) * 100;
-            } else {
-                $cobertura = (count($unicos) / $coleccion[0]['total_cartera']) * 100;
-            }
-
-            return $result = [
-                'unicos' => array_values($unicos),
-                'total_unicos' => count($unicos),
-                'total_repetidos' => count($iguales),
-                'total_r' => $coleccion[0]['total_records'],
-                'percent_cober' => $cobertura,
-                'total_enc' => $response_ruts,
-            ];
-        } else {
-            for ($i = 0; $i < count($estrategias_cache); $i++) {
-                if (!in_array($estrategias_cache[$i]['channels'], $tipos_masivos)) {
-                    $full_merge = array_merge($full_merge, json_decode($estrategias_cache[$i]['registros'], true));
+                if (isset($request->check)) {
+                    $cobertura = ($coleccion[0]['total_records'] / $coleccion[0]['total_cartera']) * 100;
+                } else {
+                    $cobertura = (count($unicos) / $coleccion[0]['total_cartera']) * 100;
                 }
-            }
 
-            $unicos = array_diff($response_ruts, $full_merge);
-            $iguales = array_intersect($response_ruts, $full_merge);
-
-            if (isset($request->check)) {
-                $cobertura = ($coleccion[0]['total_records'] / $coleccion[0]['total_cartera']) * 100;
+                return $result = [
+                    'unicos' => array_values($unicos),
+                    'total_unicos' => count($unicos),
+                    'total_repetidos' => count($iguales),
+                    'total_r' => $coleccion[0]['total_records'],
+                    'percent_cober' => $cobertura,
+                    'total_enc' => $response_ruts,
+                ];
             } else {
-                $cobertura = (count($unicos) / $coleccion[0]['total_cartera']) * 100;
-            }
+                for ($i = 0; $i < count($estrategias_cache); $i++) {
+                    if (!in_array($estrategias_cache[$i]['channels'], $tipos_masivos)) {
+                        $full_merge = array_merge($full_merge, json_decode($estrategias_cache[$i]['registros'], true));
+                    }
+                }
 
-            return $result = [
-                'unicos' => array_values($unicos),
-                'total_unicos' => count($unicos),
-                'total_repetidos' => count($iguales),
-                'total_r' => $coleccion[0]['total_records'],
-                'percent_cober' => $cobertura,
-                'total_enc' => $response_ruts,
-            ];
+                $unicos = array_diff($response_ruts, $full_merge);
+                $iguales = array_intersect($response_ruts, $full_merge);
+
+                if (isset($request->check)) {
+                    $cobertura = ($coleccion[0]['total_records'] / $coleccion[0]['total_cartera']) * 100;
+                } else {
+                    $cobertura = (count($unicos) / $coleccion[0]['total_cartera']) * 100;
+                }
+
+                return $result = [
+                    'unicos' => array_values($unicos),
+                    'total_unicos' => count($unicos),
+                    'total_repetidos' => count($iguales),
+                    'total_r' => $coleccion[0]['total_records'],
+                    'percent_cober' => $cobertura,
+                    'total_enc' => $response_ruts,
+                ];
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en la solicitud HTTP: ' . $e->getMessage()], 500);
         }
     }
 
@@ -294,7 +295,7 @@ class StrategyController extends Controller
             }
         }
 
-        $exist_record = []; // ! Quitar me estoy saltando la validacion
+        // $exist_record = []; // ! Quitar me estoy saltando la validacion
 
         if (count($exist_record) > 0) {
             $message = [

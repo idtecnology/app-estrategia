@@ -16,7 +16,7 @@
     <div class="row">
 
         <div class="col-xxl-12">
-            <div class="card" id="companyList">
+            <div class="card">
                 <div class="card-header">
                     
                 </div>
@@ -72,13 +72,6 @@
             </div>
             <?php echo $__env->make('configuration.users.modals.create', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
         </div>
-    <?php $__env->stopSection(); ?>
-    <?php $__env->startSection('script'); ?>
-        <script src="<?php echo e(URL::asset('build/libs/list.js/list.min.js')); ?>"></script>
-        <script src="<?php echo e(URL::asset('build/libs/list.pagination.js/list.pagination.min.js')); ?>"></script>
-        <script src="<?php echo e(URL::asset('build/js/pages/crm-companies.init.js')); ?>"></script>
-        <script src="<?php echo e(URL::asset('build/libs/sweetalert2/sweetalert2.min.js')); ?>"></script>
-        <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
     <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\PC\Desktop\CODIGO\GIT\app-estrategias\resources\views/clients/index.blade.php ENDPATH**/ ?>

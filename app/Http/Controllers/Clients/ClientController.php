@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Clients;
 
+use App\Http\Controllers\Configuration\EmailTemplateController;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -21,14 +22,17 @@ class ClientController extends Controller
         $estructura = Http::get(env('API_URL') .  env('API_ESTRUCTURA') . '/' . $client['id'])->collect()[0];
         $channels = Http::get(env('API_URL') . env('API_CHANNELS'))->collect()[0];
         $channels_config = json_decode($client['channels'], true);
+        $listas = Http::get(env('API_URL') . '/listas-discador/' . $client['prefix'])->json(0);
 
-        return view('clients.edit', compact('client', 'estructura', 'channels', 'channels_config'));
+        $emailsTemplates = EmailTemplateController::getEmailTemplates($client['prefix']);
+
+        return view('clients.edit', compact('client', 'estructura', 'channels', 'channels_config', 'emailsTemplates', 'listas'));
         return $channels_config;
     }
 
     public function update(Request $request, $id)
     {
-        // return $request;
+        // ! REVISAR
 
 
         $update = [];
