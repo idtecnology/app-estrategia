@@ -10,47 +10,56 @@ class EmailTemplateController extends Controller
 {
     public function store(Request $request)
     {
+        // Creamos un arreglo de datos para proceder a enviar al endpoint y almacenar.
         $saveConfig = [
-            'nombreTemplate' =>  $request->nombreTemplate,
+            'nombreTemplate' =>  strtoupper($request->nombreTemplate),
             'prefix' => $request->prefix,
             'body' => base64_encode(file_get_contents($request->file('template'))),
             'emailFrom' => $request->emailFrom,
-            'nombreFrom' => $request->nombreFrom,
-            'asunto' => $request->asunto,
+            'nombreFrom' => strtoupper($request->nombreFrom),
+            'asunto' => strtoupper($request->asunto),
             'emailReply' => $request->emailReply,
             'columnas' => json_encode([]),
             'columnasCalc' => json_encode([]),
-
         ];
 
+        try {
+            // Cargamos los datos en el enpoint
+            $getConfigMails = Http::post(env('API_URL') . env('API_EMAIL') . '/store-template', $saveConfig);
 
-        // return $saveConfig;
-
-
-        $getConfigMails = Http::post(env('API_URL') . env('API_EMAIL') . '/store-template', $saveConfig);
-
-        $result = $getConfigMails->json();
-
-        if ($result !== 0) {
-            return redirect()->back();
-        } else {
-            return redirect()->back();
+            //Obtenemos el resultado.
+            $result = $getConfigMails->json();
+            if ($result !== 0) {
+                return redirect()->back();
+            } else {
+                return redirect()->back();
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en la solicitud HTTP: ' . $e->getMessage()], 500);
         }
     }
 
 
     public static function getEmailTemplates($prefix)
     {
-        $getEmailTemplates = Http::get(env('API_URL') . env('API_EMAIL') . "/template-client/{$prefix}")->json()[0];
 
-        return $getEmailTemplates;
+        try {
+            $getEmailTemplates = Http::get(env('API_URL') . env('API_EMAIL') . "/template-client/{$prefix}")->json(0);
+            return $getEmailTemplates;
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en la solicitud HTTP: ' . $e->getMessage()], 500);
+        }
     }
 
     public function getTemplateId(Request $request)
     {
-        $getEmailTemplate = Http::get(env('API_URL') . env('API_EMAIL') . "/template/{$request->template_id}")->json()[0][0];
 
-        return response()->json($getEmailTemplate, 200);
+        try {
+            $getEmailTemplate = Http::get(env('API_URL') . env('API_EMAIL') . "/template/{$request->template_id}")->json()[0][0];
+            return response()->json($getEmailTemplate, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en la solicitud HTTP: ' . $e->getMessage()], 500);
+        }
     }
 
     public function updateTemplate(Request $request)

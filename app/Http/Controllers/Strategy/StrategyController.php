@@ -288,7 +288,7 @@ class StrategyController extends Controller
         // return $request;
         $getEstrategiasCliente = Http::get(env('API_URL') . env('API_ESTRATEGIAS') . '/diseno/' . $request->prefix);
 
-        $data = $getEstrategiasCliente->collect()[0];
+        $data = $getEstrategiasCliente->json(0);
         $exist_record = [];
         foreach ($data as $key => $value) {
             if ($value['onlyWhere'] === $request->onlyWhere) {
@@ -369,7 +369,7 @@ class StrategyController extends Controller
     public function history($client, $type)
     {
         $param = ["prefix" => $client, "type" => $type];
-        $historical = Http::withBody(json_encode($param))->get(env('API_URL') . env('API_ESTRATEGIA') . "/tipo", $param)->json()[0];
+        $historical = Http::withBody(json_encode($param))->get(env('API_URL') . env('API_ESTRATEGIA') . "/tipo", $param)->json(0);
 
         $data_client = self::getClientData($client, false);
         $channels = $data_client['channels'];

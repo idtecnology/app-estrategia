@@ -11,18 +11,27 @@ class ClientController extends Controller
 {
     public function index()
     {
-        $clients = Http::get(env('API_URL') . env('API_CLIENTS') . '/' . auth()->user()->empresa_id)->collect()[0];
+        try {
+            $clients = Http::get(env('API_URL') . env('API_CLIENTS') . '/' . auth()->user()->empresa_id)->json(0);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en la solicitud HTTP: ' . $e->getMessage()], 500);
+        }
+
         return view('clients.index', compact('clients'));
         // return 'hola';
     }
 
     public function edit($id)
     {
-        $client = Http::get(env('API_URL') . env('API_CLIENT') . '/' . $id)->collect()[0][0];
-        $estructura = Http::get(env('API_URL') .  env('API_ESTRUCTURA') . '/' . $client['id'])->collect()[0];
-        $channels = Http::get(env('API_URL') . env('API_CHANNELS'))->collect()[0];
-        $channels_config = json_decode($client['channels'], true);
-        $listas = Http::get(env('API_URL') . '/listas-discador/' . $client['prefix'])->json(0);
+        try {
+            $client = Http::get(env('API_URL') . env('API_CLIENT') . '/' . $id)->json(0)[0];
+            $estructura = Http::get(env('API_URL') .  env('API_ESTRUCTURA') . '/' . $client['id'])->json(0);
+            $channels = Http::get(env('API_URL') . env('API_CHANNELS'))->json(0);
+            $channels_config = json_decode($client['channels'], true);
+            $listas = Http::get(env('API_URL') . '/listas-discador/' . $client['prefix'])->json(0);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en la solicitud HTTP: ' . $e->getMessage()], 500);
+        }
 
 
         $est = array_values($channels_config['estructura']);
@@ -66,28 +75,32 @@ class ClientController extends Controller
 
     private function getClientConfigChannelStructure($id)
     {
-        $client = Http::get(env('API_URL') . env('API_CLIENT') . '/' . $id)->collect()[0][0];
-        return json_decode($client['channels'], true);
+        try {
+            $client = Http::get(env('API_URL') . env('API_CLIENT') . '/' . $id)->json(0)[0];
+            return json_decode($client['channels'], true);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en la solicitud HTTP: ' . $e->getMessage()], 500);
+        }
     }
 
     public function editChannels(Request $request)
     {
 
         $channels_config = self::getClientConfigChannelStructure($request->client_id);
-
         $channels_config["channels"] = $request->configuracion['channels'];
         $update = [];
         $update['idClient'] = intval($request->client_id);
         $update['channels'] = json_encode($channels_config, JSON_FORCE_OBJECT);
-        // return $update;
 
-        // return $update;
-        $updated = Http::put(env('API_URL') . env('API_CLIENT') . "/canales", $update);
-
-        if ($updated != 'false') {
-            return redirect(route('clients.edit', $request->client_id));
-        } else {
-            return $updated;
+        try {
+            $updated = Http::put(env('API_URL') . env('API_CLIENT') . "/canales", $update);
+            if ($updated != 'false') {
+                return redirect(route('clients.edit', $request->client_id));
+            } else {
+                return $updated;
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en la solicitud HTTP: ' . $e->getMessage()], 500);
         }
     }
 
@@ -95,19 +108,31 @@ class ClientController extends Controller
     {
         $channels_config = self::getClientConfigChannelStructure($request->client_id);
 
-        $channels_config["estructura"] = $request->configuracion['estructura'];
+        $config_request = $request->configuracion['estructura'];
+        $xs = [];
+        foreach ($config_request as $clave => $valor) {
+            // Verificar si la clave actual tiene una propiedad "nombre"
+            if (isset($valor["nombre"])) {
+                // Convertir a mayúsculas y asignar de nuevo
+                $config_request[$clave]["nombre"] = $valor["nombre"] ? strtoupper($valor["nombre"]) : null;
+            }
+        }
+
+        $channels_config["estructura"] = $config_request;
         $update = [];
         $update['idClient'] = intval($request->client_id);
         $update['channels'] = json_encode($channels_config, JSON_FORCE_OBJECT);
         // return $update;
 
-        // return $update;
-        $updated = Http::put(env('API_URL') . env('API_CLIENT') . "/canales", $update);
-
-        if ($updated != 'false') {
-            return redirect(route('clients.edit', $request->client_id));
-        } else {
-            return $updated;
+        try {
+            $updated = Http::put(env('API_URL') . env('API_CLIENT') . "/canales", $update);
+            if ($updated != 'false') {
+                return redirect(route('clients.edit', $request->client_id));
+            } else {
+                return $updated;
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error en la solicitud HTTP: ' . $e->getMessage()], 500);
         }
     }
 }
