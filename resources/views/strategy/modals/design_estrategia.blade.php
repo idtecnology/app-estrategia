@@ -162,11 +162,13 @@
             if (select.selectedOptions[0].text === 'AGENTE') {
                 objLista = @json($lista_discadores);
                 for (var clave in objLista) {
-                    var opcion = document.createElement("option");
-                    opcion.value = objLista[clave].idlista;
-                    opcion.text = objLista[clave].descripcion + ' ' + objLista[clave].discador;
-                    lblTemplate.innerHTML = "Lista"
-                    temp.appendChild(opcion);
+                    if (objLista[clave].tipo != 'AU') {
+                        var opcion = document.createElement("option");
+                        opcion.value = objLista[clave].idlista;
+                        opcion.text = objLista[clave].descripcion + ' ' + objLista[clave].discador;
+                        lblTemplate.innerHTML = "Lista"
+                        temp.appendChild(opcion);
+                    }
                 }
                 temp.disabled = false;
             } else if (select.selectedOptions[0].text === 'EMAIL') {
@@ -177,6 +179,20 @@
                     opcion.text = objLista[clave].nombreTemplate
                     lblTemplate.innerHTML = "Plantillas Email"
                     temp.appendChild(opcion);
+                }
+                temp.disabled = false;
+            } else if (select.selectedOptions[0].text === 'IVR') {
+                objLista = @json($lista_discadores);
+                for (var clave in objLista) {
+                    if (objLista[clave].tipo == 'AU') {
+                        var opcion = document.createElement("option");
+                        opcion.value = objLista[clave].idlista;
+                        opcion.text = objLista[clave].descripcion + ' ' + objLista[clave].discador;
+                        lblTemplate.innerHTML = "Lista"
+                        temp.appendChild(opcion);
+                    }
+
+
                 }
                 temp.disabled = false;
             } else {
