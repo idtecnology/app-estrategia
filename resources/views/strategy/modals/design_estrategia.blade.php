@@ -43,8 +43,8 @@
                     <div class="col-lg-8">
                         <div class="col-lg-21">
                             <div class="table-responsive my-2">
-                                <table class="table table-sm align-middle table-nowrap mb-0">
-                                    <thead class="table-light text-center text-uppercase">
+                                <table class="table table-sm align-middle table-nowrap mb-0" id="myTableDesign">
+                                    <thead class="text-center text-uppercase">
                                         <tr>
                                             <th scope="col">
                                                 <a type="button" class="btn btn-success btn-sm" id='btnNuevo'
@@ -57,7 +57,7 @@
                                             <th scope="col">Valor</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="myTableDesign"></tbody>
+                                    <tbody></tbody>
                                 </table>
                             </div>
                         </div>
@@ -243,8 +243,8 @@
         }
 
         function borrarRow(x) {
-            var i = x.parentNode.parentNode.rowIndex;
-            document.getElementById("myTableDesign").deleteRow(i);
+            var o = x.parentNode.parentNode.rowIndex;
+            document.getElementById("myTableDesign").deleteRow(o);
         }
 
 
@@ -571,6 +571,21 @@
             document.getElementById('showQue').value = query; // muestro en el textarea el codigo
             document.getElementById('onlyWhere').value = query; // muestro en el textarea el codigo
             document.getElementById('table_name2').value = name_table.value; // muestro en el textarea el codigo
+        }
+
+        function resetModal() {
+            var template = document.getElementById('template').value = '';
+            var canal = document.querySelector('#canalsito').value = ''
+            var query = document.getElementById('showQue').value = '';
+
+            document.getElementById('cobertura').innerHTML = `0,00%`
+            document.getElementById('unicos').innerHTML = `0`
+            document.getElementById('repetidos').innerHTML = `0`
+            document.getElementById('total').innerHTML = `0`
+            document.getElementById('cober').value = 0
+            document.getElementById('unic').value = 0
+            document.getElementById('repe').value = 0
+            document.getElementById('tota').value = 0
         }
     </script>
     <script src="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.js') }}"></script>

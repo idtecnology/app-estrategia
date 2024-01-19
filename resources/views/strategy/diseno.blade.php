@@ -127,21 +127,3 @@
             @include('strategy.modals.design_estrategia')
         </div>
     @endsection
-    @section('script')
-        <script>
-            function resetModal() {
-                var template = document.getElementById('template').value = '';
-                var canal = document.querySelector('#canalsito').value = ''
-                var query = document.getElementById('showQue').value = '';
-
-                document.getElementById('cobertura').innerHTML = `0,00%`
-                document.getElementById('unicos').innerHTML = `0`
-                document.getElementById('repetidos').innerHTML = `0`
-                document.getElementById('total').innerHTML = `0`
-                document.getElementById('cober').value = 0
-                document.getElementById('unic').value = 0
-                document.getElementById('repe').value = 0
-                document.getElementById('tota').value = 0
-            }
-        </script>
-    @endsection

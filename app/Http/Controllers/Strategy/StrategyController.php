@@ -217,10 +217,15 @@ class StrategyController extends Controller
                         return response()->json(['error' => "Error en la consulta por favor contacte a soporte tecnico, con el siguiente mensaje: \nError de tipo: Bases de datos\n Problema: Error en la consulta"], 404);
                     }
                 }
+
+                if ($rst[0][0]['total_records'] == 0) {
+                    return response()->json(['error' => "Lo sentimos pero los parametros utilizados no cumplen con ningun criterio de busqueda, por favor verifique sus criterios"], 400);
+                }
             }
 
             $coleccion = $result_query->collect()[0];
             $response_ruts = array_values(json_decode($coleccion[0]['detail_records'], true));
+
 
             if (in_array($request->channel, $tipos_masivos)) {
                 for ($i = 0; $i < count($estrategias_cache); $i++) {

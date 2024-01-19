@@ -13,7 +13,6 @@
             Editar {{ $client['prefix'] }}
         @endslot
     @endcomponent
-    {{-- {!! Form::model($client, ['method' => 'PATCH', 'route' => ['clients.update', $client['id']]]) !!} --}}
 
     <div class="row">
         <div class="col-lg-12">
@@ -224,7 +223,6 @@
                 </div>
             </div>
         </div>
-        {{-- {!! Form::close() !!} --}}
     @endsection
     @section('script')
         <script>
