@@ -195,6 +195,7 @@
 
                 }
                 temp.disabled = false;
+                2
             } else {
                 temp.disabled = true;
                 temp.value = '';
@@ -216,6 +217,8 @@
 
             var estructura = @json($estrc);
 
+            // console.log(estructura)
+
 
             var table = document.getElementById("myTableDesign");
             document.getElementById('guard').disabled = true;
@@ -233,7 +236,7 @@
                     <option>Seleccione</option>`
                 for (let d in estructura) {
                     lines +=
-                        `<option value='${estructura[d].COLUMN_TYPE}-${estructura[d].TABLE_NAME}-${estructura[d].COLUMN_NAME}'>${estructura[d].NAME}</option>`
+                        `<option value='${estructura[d].COLUMN_TYPE}-${estructura[d].TABLE_NAME}-${estructura[d].COLUMN_NAME}-${estructura[d].TABLA}'>${estructura[d].TABLA}.${estructura[d].NAME}</option>`
                 }
                 lines += `</select>`
 
@@ -492,21 +495,7 @@
 
                 }
 
-            } else if (e.target.selectedOptions[0].text === 'comuna') {
-                var selectComuna =
-                    `<select class="form-select valores" onchange="showQuery()" name="${e.target.selectedOptions[0].text}" ><option>Seleccione la comuna</option>`
-                for (let i in objComunas) {
-                    selectComuna += `<option value="${objComunas[i]}">${objComunas[i]}</option>`
-                }
-                selectComuna += `</select>`
 
-                if (document.getElementById('td2_' + i)) {
-                    document.getElementById('td2_' + i).innerHTML = ''
-                    document.getElementById('td2_' + i).innerHTML = selectComuna;
-                } else {
-                    ultimaFila.appendChild(nuevoTd);
-                    document.getElementById('td2_' + i).innerHTML = selectComuna;
-                }
             } else {
                 nuevoInput.name = e.target.selectedOptions[0].text
                 nuevoInput.className = 'form-control form-control-sm valores limite-input'
@@ -547,10 +536,13 @@
 
             const campo = document.querySelectorAll('.campo');
 
+            // console.log(valoresElements)
+
             valoresElements.forEach((element, i) => {
 
                 var dato = campo[i].value
                 var openingParenIndex3 = dato.split("-");
+                // console.log(openingParenIndex3)
 
                 if (element.name === 'monto_min' && element.value !== '') { //Verificamos el campo monto
                     const montoMin = parseFloat(element.value);
@@ -575,9 +567,13 @@
                     if (op[i].value === 'like') {
                         queryParts.push(`${openingParenIndex3[2]} like '%${element.value}%'`); // 
                     } else if (element.type === 'date' || element.type === 'text') {
-                        queryParts.push(`${openingParenIndex3[2]} ${op[i].value} '${element.value}'`); // 
+                        queryParts.push(
+                            `${openingParenIndex3[3]}.${openingParenIndex3[2]} ${op[i].value} '${element.value}'`
+                        ); // 
                     } else {
-                        queryParts.push(`${openingParenIndex3[2]} ${op[i].value} ${element.value}`); // 
+                        queryParts.push(
+                            `${openingParenIndex3[3]}.${openingParenIndex3[2]} ${op[i].value} ${element.value}`
+                        ); // 
                     }
 
                 }

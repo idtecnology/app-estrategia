@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content border-0">
             <div class="modal-header bg-soft-info p-3">
-                <h5 class="modal-title" id="exampleModalLabel">Crear una plantilla de email nueva</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Cartera/Mejor Gesti&oacute;n</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                     id="close-modal"></button>
             </div>
@@ -10,78 +10,166 @@
 
             <input type="hidden" name="client_id" value="<?php echo e($client['id']); ?>">
             <div class="modal-body">
-                <div class="table-responsive table-card">
-                    <table class="table table-bordered table-sm mb-0">
-                        <thead class="table-dark text-uppercase text-center">
-                            <tr>
-                                <th>Campo BD</th>
-                                <th>Nombre</th>
-                                <th width='10%'>Seleccionar</th>
-                            </tr>
-                        </thead>
-                        <tbody class="align-middle">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-bs-toggle="tab" href="#structure">Cartera</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#better">Mejor Gesti&oacute;n</a>
+                    </li>
+                </ul>
 
-                            <?php $__currentLoopData = $estructura; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ke => $estruc): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <tr>
-                                    <td>
-                                        <?php echo e($estruc['COLUMN_NAME']); ?>
+                <div class="tab-content">
+                    <div class="tab-pane container active p-3" id="structure">
+                        <div class="table-responsive table-card">
+                            <table class="table table-bordered table-sm mb-0">
+                                <thead class="table-dark text-uppercase text-center">
+                                    <tr>
+                                        <th>Campo BD</th>
+                                        <th>Nombre</th>
+                                        <th width='10%'>Seleccionar</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="align-middle">
 
-                                    </td>
-                                    <td>
-                                        <?php if(isset($channels_config['estructura'])): ?>
-                                            <?php if(in_array($estruc['COLUMN_NAME'], array_keys($channels_config['estructura']))): ?>
-                                                <?php if(isset($channels_config['estructura'][$estruc['COLUMN_NAME']]['utilizar'])): ?>
+                                    <?php $__currentLoopData = $estructura; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ke => $estruc): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <tr>
+                                            <td>
+                                                <?php echo e($estruc['COLUMN_NAME']); ?>
+
+                                            </td>
+                                            <td>
+                                                <?php if(isset($channels_config['estructura'])): ?>
+                                                    <?php if(in_array($estruc['COLUMN_NAME'], array_keys($channels_config['estructura']))): ?>
+                                                        <?php if(isset($channels_config['estructura'][$estruc['COLUMN_NAME']]['utilizar'])): ?>
+                                                            <input class="form-control form-control-sm"
+                                                                placeholder="Ingrese un nombre" type="text"
+                                                                name="configuracion[estructura][<?php echo e($estruc['COLUMN_NAME']); ?>][nombre]"
+                                                                value="<?php echo e($channels_config['estructura'][$estruc['COLUMN_NAME']]['nombre']); ?>" />
+                                                        <?php else: ?>
+                                                            <input type="text" placeholder="Ingrese un nombre"
+                                                                class="form-control form-control-sm"
+                                                                name="configuracion[estructura][<?php echo e($estruc['COLUMN_NAME']); ?>][nombre]" />
+                                                        <?php endif; ?>
+                                                    <?php else: ?>
+                                                        <input type="text" placeholder="Ingrese un nombre"
+                                                            class="form-control form-control-sm"
+                                                            name="configuracion[estructura][<?php echo e($estruc['COLUMN_NAME']); ?>][nombre]" />
+                                                    <?php endif; ?>
+                                                <?php else: ?>
                                                     <input class="form-control form-control-sm"
                                                         placeholder="Ingrese un nombre" type="text"
-                                                        name="configuracion[estructura][<?php echo e($estruc['COLUMN_NAME']); ?>][nombre]"
-                                                        value="<?php echo e($channels_config['estructura'][$estruc['COLUMN_NAME']]['nombre']); ?>" />
-                                                <?php else: ?>
-                                                    <input type="text" placeholder="Ingrese un nombre"
-                                                        class="form-control form-control-sm"
                                                         name="configuracion[estructura][<?php echo e($estruc['COLUMN_NAME']); ?>][nombre]" />
                                                 <?php endif; ?>
-                                            <?php else: ?>
-                                                <input type="text" placeholder="Ingrese un nombre"
-                                                    class="form-control form-control-sm"
-                                                    name="configuracion[estructura][<?php echo e($estruc['COLUMN_NAME']); ?>][nombre]" />
-                                            <?php endif; ?>
-                                        <?php else: ?>
-                                            <input class="form-control form-control-sm" placeholder="Ingrese un nombre"
-                                                type="text"
-                                                name="configuracion[estructura][<?php echo e($estruc['COLUMN_NAME']); ?>][nombre]" />
-                                        <?php endif; ?>
 
-                                    </td>
+                                            </td>
 
-                                    <td class="text-center">
+                                            <td class="text-center">
 
-                                        <?php if(isset($channels_config['estructura'])): ?>
-                                            <?php if(in_array($estruc['COLUMN_NAME'], array_keys($channels_config['estructura']))): ?>
-                                                <?php if(isset($channels_config['estructura'][$estruc['COLUMN_NAME']]['utilizar'])): ?>
-                                                    <input type="checkbox"
-                                                        name="configuracion[estructura][<?php echo e($estruc['COLUMN_NAME']); ?>][utilizar]"
-                                                        checked
-                                                        value="<?php echo e($channels_config['estructura'][$estruc['COLUMN_NAME']]['utilizar']); ?>" />
+                                                <?php if(isset($channels_config['estructura'])): ?>
+                                                    <?php if(in_array($estruc['COLUMN_NAME'], array_keys($channels_config['estructura']))): ?>
+                                                        <?php if(isset($channels_config['estructura'][$estruc['COLUMN_NAME']]['utilizar'])): ?>
+                                                            <input type="checkbox"
+                                                                name="configuracion[estructura][<?php echo e($estruc['COLUMN_NAME']); ?>][utilizar]"
+                                                                checked
+                                                                value="<?php echo e($channels_config['estructura'][$estruc['COLUMN_NAME']]['utilizar']); ?>" />
+                                                        <?php else: ?>
+                                                            <input type="checkbox"
+                                                                name="configuracion[estructura][<?php echo e($estruc['COLUMN_NAME']); ?>][utilizar]" />
+                                                        <?php endif; ?>
+                                                    <?php else: ?>
+                                                        <input type="checkbox"
+                                                            name="configuracion[estructura][<?php echo e($estruc['COLUMN_NAME']); ?>][utilizar]" />
+                                                    <?php endif; ?>
                                                 <?php else: ?>
                                                     <input type="checkbox"
                                                         name="configuracion[estructura][<?php echo e($estruc['COLUMN_NAME']); ?>][utilizar]" />
                                                 <?php endif; ?>
-                                            <?php else: ?>
-                                                <input type="checkbox"
-                                                    name="configuracion[estructura][<?php echo e($estruc['COLUMN_NAME']); ?>][utilizar]" />
-                                            <?php endif; ?>
-                                        <?php else: ?>
-                                            <input type="checkbox"
-                                                name="configuracion[estructura][<?php echo e($estruc['COLUMN_NAME']); ?>][utilizar]" />
-                                        <?php endif; ?>
-                                        
-                                    </td>
-                                </tr>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        </tbody>
-                    </table>
+                                                
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                </tbody>
+                            </table>
 
+                        </div>
+                    </div>
+                    <div class="tab-pane container fade p-3" id="better">
+                        <div class="table-responsive table-card">
+                            <table class="table table-bordered table-sm mb-0">
+                                <thead class="table-dark text-uppercase text-center">
+                                    <tr>
+                                        <th>Campo BD</th>
+                                        <th>Nombre</th>
+                                        <th width='10%'>Seleccionar</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="align-middle">
+
+                                    <?php $__currentLoopData = $better_structure; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ke => $better): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <tr>
+                                            <td>
+                                                <?php echo e($better['COLUMN_NAME']); ?>
+
+                                            </td>
+                                            <td>
+                                                <?php if(isset($channels_config['mejor'])): ?>
+                                                    <?php if(in_array($better['COLUMN_NAME'], array_keys($channels_config['mejor']))): ?>
+                                                        <?php if(isset($channels_config['mejor'][$better['COLUMN_NAME']]['utilizar'])): ?>
+                                                            <input class="form-control form-control-sm"
+                                                                placeholder="Ingrese un nombre" type="text"
+                                                                name="configuracion[mejor][<?php echo e($better['COLUMN_NAME']); ?>][nombre]"
+                                                                value="<?php echo e($channels_config['mejor'][$better['COLUMN_NAME']]['nombre']); ?>" />
+                                                        <?php else: ?>
+                                                            <input type="text" placeholder="Ingrese un nombre"
+                                                                class="form-control form-control-sm"
+                                                                name="configuracion[mejor][<?php echo e($better['COLUMN_NAME']); ?>][nombre]" />
+                                                        <?php endif; ?>
+                                                    <?php else: ?>
+                                                        <input type="text" placeholder="Ingrese un nombre"
+                                                            class="form-control form-control-sm"
+                                                            name="configuracion[mejor][<?php echo e($better['COLUMN_NAME']); ?>][nombre]" />
+                                                    <?php endif; ?>
+                                                <?php else: ?>
+                                                    <input class="form-control form-control-sm"
+                                                        placeholder="Ingrese un nombre" type="text"
+                                                        name="configuracion[mejor][<?php echo e($better['COLUMN_NAME']); ?>][nombre]" />
+                                                <?php endif; ?>
+
+                                            </td>
+
+                                            <td class="text-center">
+
+                                                <?php if(isset($channels_config['mejor'])): ?>
+                                                    <?php if(in_array($better['COLUMN_NAME'], array_keys($channels_config['mejor']))): ?>
+                                                        <?php if(isset($channels_config['mejor'][$better['COLUMN_NAME']]['utilizar'])): ?>
+                                                            <input type="checkbox"
+                                                                name="configuracion[mejor][<?php echo e($better['COLUMN_NAME']); ?>][utilizar]"
+                                                                checked
+                                                                value="<?php echo e($channels_config['mejor'][$better['COLUMN_NAME']]['utilizar']); ?>" />
+                                                        <?php else: ?>
+                                                            <input type="checkbox"
+                                                                name="configuracion[mejor][<?php echo e($better['COLUMN_NAME']); ?>][utilizar]" />
+                                                        <?php endif; ?>
+                                                    <?php else: ?>
+                                                        <input type="checkbox"
+                                                            name="configuracion[mejor][<?php echo e($better['COLUMN_NAME']); ?>][utilizar]" />
+                                                    <?php endif; ?>
+                                                <?php else: ?>
+                                                    <input type="checkbox"
+                                                        name="configuracion[mejor][<?php echo e($better['COLUMN_NAME']); ?>][utilizar]" />
+                                                <?php endif; ?>
+                                                
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
                 </div>
+
             </div>
             <div class="modal-footer">
                 <div class="hstack gap-2 justify-content-end">

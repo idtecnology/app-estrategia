@@ -49,19 +49,19 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-4">
             <div class="card" id="">
-                <div class="card-header">
+                <div class="card-header text-center">
                     <h3>Canales</h3>
                 </div>
                 <div class="card-body">
                     <div>
                         <div class="table-responsive table-card">
-                            <table class="table table-sm table-bordered">
+                            <table class="table table-sm table-bordered mb-0">
                                 <thead class="table-dark text-uppercase align-middle">
                                     <tr>
                                         <th>Canales:</th>
-                                        <th width="15%">tipo</th>
+                                        <th class="text-center" width="15%">tipo</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -71,7 +71,7 @@
                                                 <label for="checkbox_<?php echo e($k); ?>"
                                                     class="form-check-label"><?php echo e(strtoupper($channels[$k]['name'])); ?></label>
                                             </td>
-                                            <td>
+                                            <td class="text-center">
                                                 <?php echo e(isset($value['tipo']) ? 'Masivo' : ''); ?>
 
                                             </td>
@@ -87,8 +87,8 @@
         </div>
         <div class="col-md-4">
             <div class="card" id="">
-                <div class="card-header">
-                    <h3>Estructura</h3>
+                <div class="card-header text-center">
+                    <h3>Cartera</h3>
                 </div>
                 <div class="card-body">
                     <div>
@@ -96,14 +96,40 @@
                             <table class="table table-bordered table-sm mb-0">
                                 <thead class="table-dark text-uppercase text-center">
                                     <tr>
-
-                                        <th>Nombre</th>
+                                        <th>Cartera</th>
                                     </tr>
                                 </thead>
                                 <tbody class="align-middle">
                                     <?php $__currentLoopData = $est2; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $campo): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr>
                                             <td><?php echo e($campo); ?></td>
+                                        </tr>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card" id="">
+                <div class="card-header text-center">
+                    <h3>Mejor Gesti&oacute;n</h3>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div class="table-responsive table-card">
+                            <table class="table table-bordered table-sm mb-0">
+                                <thead class="table-dark text-uppercase text-center">
+                                    <tr>
+                                        <th>Mejor Gesti&oacute;n</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="align-middle">
+                                    <?php $__currentLoopData = $mej2; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $campo2): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <tr>
+                                            <td><?php echo e($campo2); ?></td>
                                         </tr>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </tbody>
@@ -132,8 +158,8 @@
                                     <tr>
 
                                         <th scope="col">Nombre</th>
-                                        <th width="30%" scope="col">Discador</th>
-                                        <th width="10%" scope="col">tipo</th>
+                                        <th class="text-center" width="30%" scope="col">Discador</th>
+                                        <th class="text-center" width="10%" scope="col">tipo</th>
                                     </tr>
                                 </thead>
                                 <tbody class="list form-check-all">
@@ -146,11 +172,11 @@
                                                 <?php echo e($lista['descripcion']); ?>
 
                                             </td>
-                                            <td>
+                                            <td class="text-center">
                                                 <?php echo e($lista['discador']); ?>
 
                                             </td>
-                                            <td>
+                                            <td class="text-center">
                                                 <?php echo e($lista['tipo']); ?>
 
                                             </td>
@@ -178,7 +204,7 @@
                                     <tr>
 
                                         <th scope="col">Nombre de la plantilla</th>
-                                        <th width="10%" scope="col">Fecha</th>
+                                        <th class="text-center" width="10%" scope="col">Fecha</th>
                                         <th width="5%" class="text-center" scope="col">Acciones</th>
                                     </tr>
                                 </thead>
@@ -192,7 +218,7 @@
                                                 <?php echo e($template['nombreTemplate']); ?>
 
                                             </td>
-                                            <td>
+                                            <td class="text-center">
                                                 <?php echo e(date('d-m-Y', strtotime($template['created_at']))); ?>
 
                                             </td>

@@ -13,7 +13,7 @@ class StrategyController extends Controller
 
     public function show($id)
     {
-        $strategies = Http::timeout(3600)->get(env('API_URL') . env('API_ESTRATEGIAS') . '/' . strtoupper($id))->json()[0];
+        $strategies = Http::timeout(3600)->get(env('API_URL') . env('API_ESTRATEGIAS') . '/' . strtoupper($id))->json(0);
         $data_client = self::getClientData($id);
         $channels = $data_client['channels'];
         $channels_config = json_decode($data_client['client']['channels'], true);
@@ -74,6 +74,8 @@ class StrategyController extends Controller
             $pool->as('listas')->get(env('API_URL') . '/listas-discador/' . $client['prefix']),
             $pool->as('channels')->get(env('API_URL') . env('API_CHANNELS')),
             $diseno === true ? $pool->as('stategies')->get(env('API_URL') . env('API_ESTRATEGIAS') . '/diseno/' . strtoupper($client['prefix'])) : '',
+            $pool->as('better_structure')->get(env('API_URL') .  '/better-structure/' . $client['id']),
+
         ]);
 
         return [
@@ -83,6 +85,7 @@ class StrategyController extends Controller
             'channels' => $responses['channels']->json(0),
             'template_client' => $responses['template_client']->json(0),
             'stategies' => $diseno === true ? $responses['stategies']->json(0) : [],
+            'better_structure' => $responses['better_structure']->json(0),
         ];
     }
 
@@ -106,6 +109,9 @@ class StrategyController extends Controller
         $estructura = $data_client['structure_client'];
         $lista_discadores = $data_client['listas'];
         $template_client = $data_client['template_client'];
+        $better_structure = $data_client['better_structure'];
+
+
 
         $estrc = [];
         if (isset($channels_config['estructura'])) {
@@ -113,12 +119,27 @@ class StrategyController extends Controller
                 if (in_array($vi['COLUMN_NAME'], array_keys($channels_config['estructura']))) {
                     if (isset($channels_config['estructura'][$vi['COLUMN_NAME']]['utilizar'])) {
                         $vi['NAME'] = $channels_config['estructura'][$vi['COLUMN_NAME']]['nombre'];
+                        $vi['TABLA'] = 'CA';
                         $estrc[] = $vi;
                     }
                 }
             }
         } else {
             $estrc = null;
+        }
+        $mejor = [];
+        if (isset($channels_config['mejor'])) {
+            foreach ($better_structure as $ki => $vi) {
+                if (in_array($vi['COLUMN_NAME'], array_keys($channels_config['mejor']))) {
+                    if (isset($channels_config['mejor'][$vi['COLUMN_NAME']]['utilizar'])) {
+                        $vi['NAME'] = $channels_config['mejor'][$vi['COLUMN_NAME']]['nombre'];
+                        $vi['TABLA'] = 'MG';
+                        $mejor[] = $vi;
+                    }
+                }
+            }
+        } else {
+            $mejor = null;
         }
 
         $datas = $data_client['stategies'];
@@ -172,6 +193,10 @@ class StrategyController extends Controller
         }
 
         // return $datas;
+
+        $estrc = array_merge($estrc, $mejor);
+
+        // return $estrc;
 
         return view('strategy/diseno', compact('template_client', 'lista_discadores', 'client', 'datas', 'porcentaje_total',  'suma_total', 'channels', 'estrc', 'ch_approve', 'channels_config'));
     }

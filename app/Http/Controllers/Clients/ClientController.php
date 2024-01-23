@@ -26,12 +26,15 @@ class ClientController extends Controller
         try {
             $client = Http::get(env('API_URL') . env('API_CLIENT') . '/' . $id)->json(0)[0];
             $estructura = Http::get(env('API_URL') .  env('API_ESTRUCTURA') . '/' . $client['id'])->json(0);
+            $better_structure = Http::get(env('API_URL') .  '/better-structure/' . $client['id'])->json(0);
             $channels = Http::get(env('API_URL') . env('API_CHANNELS'))->json(0);
             $channels_config = json_decode($client['channels'], true);
             $listas = Http::get(env('API_URL') . '/listas-discador/' . $client['prefix'])->json(0);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error en la solicitud HTTP: ' . $e->getMessage()], 500);
         }
+
+        // return $channels_config['mejor'];
 
 
         $est = array_values($channels_config['estructura']);
@@ -43,11 +46,21 @@ class ClientController extends Controller
             }
         }
 
+
+        $mej = array_values($channels_config['mejor']);
+        $mej2 = [];
+
+        for ($o = 0; $o < count($mej); $o++) {
+            if (array_key_exists('utilizar', $mej[$o])) {
+                $mej2[] = $mej[$o]['nombre'];
+            }
+        }
+
         // return $est2;
 
         $emailsTemplates = EmailTemplateController::getEmailTemplates($client['prefix']);
 
-        return view('clients.edit', compact('est2', 'client', 'estructura', 'channels', 'channels_config', 'emailsTemplates', 'listas'));
+        return view('clients.edit', compact('better_structure', 'est2', 'mej2', 'client', 'estructura', 'channels', 'channels_config', 'emailsTemplates', 'listas'));
         return $channels_config;
     }
 
@@ -108,17 +121,26 @@ class ClientController extends Controller
     {
         $channels_config = self::getClientConfigChannelStructure($request->client_id);
 
-        $config_request = $request->configuracion['estructura'];
-        $xs = [];
-        foreach ($config_request as $clave => $valor) {
+        $config_request_estructura = $request->configuracion['estructura'];
+        $config_request_mejor = $request->configuracion['mejor'];
+        foreach ($config_request_estructura as $clave => $valor) {
             // Verificar si la clave actual tiene una propiedad "nombre"
             if (isset($valor["nombre"])) {
                 // Convertir a mayúsculas y asignar de nuevo
-                $config_request[$clave]["nombre"] = $valor["nombre"] ? strtoupper($valor["nombre"]) : null;
+                $config_request_estructura[$clave]["nombre"] = $valor["nombre"] ? strtoupper($valor["nombre"]) : null;
             }
         }
 
-        $channels_config["estructura"] = $config_request;
+        foreach ($config_request_mejor as $clave2 => $valor2) {
+            // Verificar si la clave actual tiene una propiedad "nombre"
+            if (isset($valor2["nombre"])) {
+                // Convertir a mayúsculas y asignar de nuevo
+                $config_request_mejor[$clave2]["nombre"] = $valor2["nombre"] ? strtoupper($valor2["nombre"]) : null;
+            }
+        }
+
+        $channels_config['mejor'] = $config_request_mejor;
+        $channels_config["estructura"] = $config_request_estructura;
         $update = [];
         $update['idClient'] = intval($request->client_id);
         $update['channels'] = json_encode($channels_config, JSON_FORCE_OBJECT);

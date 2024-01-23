@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content border-0">
             <div class="modal-header bg-soft-info p-3">
-                <h5 class="modal-title" id="exampleModalLabel">Crear una plantilla de email nueva</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Canales</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                     id="close-modal"></button>
             </div>
