@@ -391,6 +391,14 @@ class StrategyController extends Controller
         return ['message' => 'Puesto en produccion', 'result' => $actived['status']];
     }
 
+    public function deleteStrategy(Request $request)
+    {
+
+        // return $request;
+        $actived = Http::delete(env('API_URL') . env('API_ESTRATEGIA') . "/eliminar/" . $request->id);
+        return ['message' => 'Estrategia eliminada', 'result' => $actived['status']];
+    }
+
     public function history($client, $type)
     {
         $param = ["prefix" => $client, "type" => $type];

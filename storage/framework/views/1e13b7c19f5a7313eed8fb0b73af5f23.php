@@ -85,10 +85,11 @@
                                                 <td><?php echo e($data['onlyWhere']); ?></td>
                                                 <td class="text-center">
                                                     <a type="button" class="btn btn-success btn-sm" id='btnActivate'
-                                                        onclick="acceptedStrategy(<?php echo e($data['id']); ?>, <?php echo e($data['channels']); ?>, '<?php echo e($client['prefix']); ?>')" />
-                                                    <i class="ri-check-line"></i>
+                                                        onclick="acceptedStrategy(<?php echo e($data['id']); ?>, <?php echo e($data['channels']); ?>, '<?php echo e($client['prefix']); ?>')">
+                                                        <i class="ri-check-line"></i>
                                                     </a>
-                                                    <a type="button" class="btn btn-danger btn-sm" id='btnDelete'>
+                                                    <a type="button" class="btn btn-danger btn-sm eliminar-estrategia"
+                                                        onclick="deleteStrategy(<?php echo e($data['id']); ?>)" id='btnDelete'>
                                                         <i class="ri-close-line"></i>
                                                     </a>
                                                 </td>

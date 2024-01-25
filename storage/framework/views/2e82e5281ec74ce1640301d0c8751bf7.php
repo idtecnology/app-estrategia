@@ -152,6 +152,35 @@
 
         }
 
+        function deleteStrategy(id) {
+            // spinner.removeAttribute('hidden');
+            fetch('<?php echo e(route('strategy.delete-strategy')); ?>', {
+                method: 'POST',
+                body: JSON.stringify({
+                    id: id,
+                }),
+                headers: {
+                    'content-type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                }
+            }).then(response => {
+                return response.json();
+            }).then(data => {
+                // Recargar la página actual
+                if (data.result === '201') {
+                    alert(data.message)
+                    // spinner.setAttribute('hidden', '');
+                    location.reload()
+                } else {
+                    // document.querySelector('.alert').classList.remove('d-none');
+                    // document.querySelector('.alert').classList.remove('alert-success');
+                    // document.querySelector('.alert').classList.add('alert-danger')
+                    // document.querySelector('#messages').innerHTML = data.message
+                }
+            });
+
+        }
+
         var i = 0;
         const csrfToken = "<?php echo e(csrf_token()); ?>";
         document.getElementById("myForm").addEventListener('submit', validar);
