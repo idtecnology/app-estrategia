@@ -105,7 +105,7 @@
                                                     <ul class="list-inline hstack gap-2 mb-0">
                                                         <li class="list-inline-item" data-bs-toggle="tooltip"
                                                             data-bs-trigger="hover" data-bs-placement="top" title="Stop">
-                                                            <a data-identificador="{{ $strategy['id'] }}"
+                                                            <a onclick="stopedStrategy({{ $strategy['id'] }})"
                                                                 class="remove-item-btn detener-estrategia">
                                                                 <i class="ri-stop-circle-line align-bottom text-muted"></i>
                                                             </a>

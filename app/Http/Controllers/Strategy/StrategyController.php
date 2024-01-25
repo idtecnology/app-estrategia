@@ -399,6 +399,14 @@ class StrategyController extends Controller
         return ['message' => 'Estrategia eliminada', 'result' => $actived['status']];
     }
 
+    public function stopedStrategy(Request $request)
+    {
+
+        // return $request;
+        $actived = Http::put(env('API_URL') . env('API_ESTRATEGIA') . "/detener/" . $request->id);
+        return ['message' => 'Estrategia detenida', 'result' => $actived['status']];
+    }
+
     public function history($client, $type)
     {
         $param = ["prefix" => $client, "type" => $type];
