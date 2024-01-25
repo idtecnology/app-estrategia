@@ -92,7 +92,7 @@
                                                         <li class="list-inline-item" data-bs-toggle="tooltip"
                                                             data-bs-trigger="hover" data-bs-placement="top" title="Stop">
                                                             <a onclick="stopedStrategy(<?php echo e($strategy['id']); ?>)"
-                                                                class="remove-item-btn detener-estrategia">
+                                                                class="remove-item-btn">
                                                                 <i class="ri-stop-circle-line align-bottom text-muted"></i>
                                                             </a>
                                                         </li>
@@ -119,6 +119,28 @@
     <?php $__env->stopSection(); ?>
     <?php $__env->startSection('script'); ?>
         <script>
+            function stopedStrategy(id) {
+                fetch('<?php echo e(route('strategy.stopped-strategy')); ?>', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        id: id,
+                    }),
+                    headers: {
+                        'content-type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    }
+                }).then(response => {
+                    return response.json();
+                }).then(data => {
+                    // Recargar la página actual
+                    if (data.result === '201') {
+                        alert(data.message)
+                        // spinner.setAttribute('hidden', '');
+                        location.reload()
+                    } else {}
+                });
+
+            }
             const enlacesElement = document.querySelectorAll('.detener-estrategia');
             const csrfToken = "<?php echo e(csrf_token()); ?>";
 

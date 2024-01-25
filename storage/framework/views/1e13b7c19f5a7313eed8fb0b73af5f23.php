@@ -88,7 +88,7 @@
                                                         onclick="acceptedStrategy(<?php echo e($data['id']); ?>, <?php echo e($data['channels']); ?>, '<?php echo e($client['prefix']); ?>')">
                                                         <i class="ri-check-line"></i>
                                                     </a>
-                                                    <a type="button" class="btn btn-danger btn-sm eliminar-estrategia"
+                                                    <a type="button" class="btn btn-danger btn-sm"
                                                         onclick="deleteStrategy(<?php echo e($data['id']); ?>)" id='btnDelete'>
                                                         <i class="ri-close-line"></i>
                                                     </a>
