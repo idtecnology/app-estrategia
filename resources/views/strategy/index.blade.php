@@ -134,6 +134,7 @@
     @section('script')
         <script>
             const enlacesElement = document.querySelectorAll('.detener-estrategia');
+            const csrfToken = "{{ csrf_token() }}";
 
             if (enlacesElement !== null) {
                 enlacesElement.forEach((enlaceElement) => {
@@ -145,6 +146,10 @@
                         } else {
                             fetch(`http://api.iawave:3000/api/v1/estrategia/detener/${enlaceElement.dataset.identificador}`, {
                                     method: 'PUT',
+                                    headers: {
+                                        'content-type': 'application/json',
+                                        'X-CSRF-TOKEN': csrfToken
+                                    }
                                 })
                                 .then(response => {
                                     if (response.ok) {
