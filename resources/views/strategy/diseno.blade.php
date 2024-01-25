@@ -98,7 +98,7 @@
                                                         onclick="acceptedStrategy({{ $data['id'] }}, {{ $data['channels'] }}, '{{ $client['prefix'] }}')">
                                                         <i class="ri-check-line"></i>
                                                     </a>
-                                                    <a type="button" class="btn btn-danger btn-sm eliminar-estrategia"
+                                                    <a type="button" class="btn btn-danger btn-sm"
                                                         onclick="deleteStrategy({{ $data['id'] }})" id='btnDelete'>
                                                         <i class="ri-close-line"></i>
                                                     </a>
