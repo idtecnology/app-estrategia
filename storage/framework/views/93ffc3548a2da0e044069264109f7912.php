@@ -189,38 +189,25 @@
 </div>
 <?php $__env->startSection('script'); ?>
     <script>
-        // const checks = document.querySelectorAll('checks')
-
-        // console.log(checks)
-
         document.getElementById("editStructure").addEventListener("submit", function(event) {
-            // Evitar que el formulario se envíe por defecto
             event.preventDefault();
 
-            // Obtener todos los checkboxes y campos de texto
             var checkboxes = document.getElementsByClassName("checks");
             var textInputs = document.getElementsByClassName("input-text");
 
             for (var i = 0; i < checkboxes.length; i++) {
                 if (checkboxes[i].checked) {
-                    console.log('si: ' + i)
-                    // Obtener el índice del checkbox seleccionado
                     var index = checkboxes[i].getAttribute("data-related-checkbox");
-
-                    // Obtener el campo de texto correspondiente al checkbox seleccionado
                     var relatedTextInput = textInputs[i];
 
-                    // Validar si el campo de texto está vacío
                     if (relatedTextInput.value.trim() === "") {
-                        // Si está vacío, mostrar un mensaje de error o realizar la acción que desees
-                        alert("El campo de texto relacionado al checkbox seleccionado es requerido.");
+                        alert("El campo de texto es requerido.");
                         relatedTextInput.focus()
-                        return; // Detener el envío del formulario
+                        return;
                     }
                 }
             }
 
-            // Si todos los checkboxes seleccionados tienen campos de texto no vacíos, enviar el formulario
             this.submit();
         });
     </script>
