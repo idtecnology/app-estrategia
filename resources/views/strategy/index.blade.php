@@ -106,7 +106,7 @@
                                                         <li class="list-inline-item" data-bs-toggle="tooltip"
                                                             data-bs-trigger="hover" data-bs-placement="top" title="Stop">
                                                             <a onclick="stopedStrategy({{ $strategy['id'] }})"
-                                                                class="remove-item-btn">
+                                                                class="remove-item-btn fs-4">
                                                                 <i class="ri-stop-circle-line align-bottom text-muted"></i>
                                                             </a>
                                                         </li>

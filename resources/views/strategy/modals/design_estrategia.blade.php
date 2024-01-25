@@ -149,29 +149,6 @@
 
         }
 
-        function stopedStrategy(id) {
-            fetch('{{ route('strategy.stopped-strategy') }}', {
-                method: 'POST',
-                body: JSON.stringify({
-                    id: id,
-                }),
-                headers: {
-                    'content-type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken
-                }
-            }).then(response => {
-                return response.json();
-            }).then(data => {
-                // Recargar la página actual
-                if (data.result === '201') {
-                    alert(data.message)
-                    // spinner.setAttribute('hidden', '');
-                    location.reload()
-                } else {}
-            });
-
-        }
-
         function deleteStrategy(id) {
             // spinner.removeAttribute('hidden');
             fetch('{{ route('strategy.delete-strategy') }}', {
