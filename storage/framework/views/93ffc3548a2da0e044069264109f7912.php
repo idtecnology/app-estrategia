@@ -6,7 +6,12 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                     id="close-modal"></button>
             </div>
-            <?php echo Form::open(['route' => 'clients.edit-structure', 'method' => 'POST', 'enctype' => 'multipart/form-data']); ?>
+            <?php echo Form::open([
+                'route' => 'clients.edit-structure',
+                'method' => 'POST',
+                'enctype' => 'multipart/form-data',
+                'id' => 'editStructure',
+            ]); ?>
 
             <input type="hidden" name="client_id" value="<?php echo e($client['id']); ?>">
             <div class="modal-body">
@@ -42,22 +47,22 @@
                                                 <?php if(isset($channels_config['estructura'])): ?>
                                                     <?php if(in_array($estruc['COLUMN_NAME'], array_keys($channels_config['estructura']))): ?>
                                                         <?php if(isset($channels_config['estructura'][$estruc['COLUMN_NAME']]['utilizar'])): ?>
-                                                            <input class="form-control form-control-sm"
+                                                            <input class="form-control form-control-sm input-text"
                                                                 placeholder="Ingrese un nombre" type="text"
                                                                 name="configuracion[estructura][<?php echo e($estruc['COLUMN_NAME']); ?>][nombre]"
                                                                 value="<?php echo e($channels_config['estructura'][$estruc['COLUMN_NAME']]['nombre']); ?>" />
                                                         <?php else: ?>
                                                             <input type="text" placeholder="Ingrese un nombre"
-                                                                class="form-control form-control-sm"
+                                                                class="form-control form-control-sm input-text"
                                                                 name="configuracion[estructura][<?php echo e($estruc['COLUMN_NAME']); ?>][nombre]" />
                                                         <?php endif; ?>
                                                     <?php else: ?>
                                                         <input type="text" placeholder="Ingrese un nombre"
-                                                            class="form-control form-control-sm"
+                                                            class="form-control form-control-sm input-text"
                                                             name="configuracion[estructura][<?php echo e($estruc['COLUMN_NAME']); ?>][nombre]" />
                                                     <?php endif; ?>
                                                 <?php else: ?>
-                                                    <input class="form-control form-control-sm"
+                                                    <input class="form-control form-control-sm input-text"
                                                         placeholder="Ingrese un nombre" type="text"
                                                         name="configuracion[estructura][<?php echo e($estruc['COLUMN_NAME']); ?>][nombre]" />
                                                 <?php endif; ?>
@@ -69,20 +74,20 @@
                                                 <?php if(isset($channels_config['estructura'])): ?>
                                                     <?php if(in_array($estruc['COLUMN_NAME'], array_keys($channels_config['estructura']))): ?>
                                                         <?php if(isset($channels_config['estructura'][$estruc['COLUMN_NAME']]['utilizar'])): ?>
-                                                            <input type="checkbox"
+                                                            <input class="checks" type="checkbox"
                                                                 name="configuracion[estructura][<?php echo e($estruc['COLUMN_NAME']); ?>][utilizar]"
                                                                 checked
                                                                 value="<?php echo e($channels_config['estructura'][$estruc['COLUMN_NAME']]['utilizar']); ?>" />
                                                         <?php else: ?>
-                                                            <input type="checkbox"
+                                                            <input class="checks" type="checkbox"
                                                                 name="configuracion[estructura][<?php echo e($estruc['COLUMN_NAME']); ?>][utilizar]" />
                                                         <?php endif; ?>
                                                     <?php else: ?>
-                                                        <input type="checkbox"
+                                                        <input class="checks" type="checkbox"
                                                             name="configuracion[estructura][<?php echo e($estruc['COLUMN_NAME']); ?>][utilizar]" />
                                                     <?php endif; ?>
                                                 <?php else: ?>
-                                                    <input type="checkbox"
+                                                    <input class="checks" type="checkbox"
                                                         name="configuracion[estructura][<?php echo e($estruc['COLUMN_NAME']); ?>][utilizar]" />
                                                 <?php endif; ?>
                                                 
@@ -116,22 +121,22 @@
                                                 <?php if(isset($channels_config['mejor'])): ?>
                                                     <?php if(in_array($better['COLUMN_NAME'], array_keys($channels_config['mejor']))): ?>
                                                         <?php if(isset($channels_config['mejor'][$better['COLUMN_NAME']]['utilizar'])): ?>
-                                                            <input class="form-control form-control-sm"
+                                                            <input class="form-control form-control-sm input-text"
                                                                 placeholder="Ingrese un nombre" type="text"
                                                                 name="configuracion[mejor][<?php echo e($better['COLUMN_NAME']); ?>][nombre]"
                                                                 value="<?php echo e($channels_config['mejor'][$better['COLUMN_NAME']]['nombre']); ?>" />
                                                         <?php else: ?>
                                                             <input type="text" placeholder="Ingrese un nombre"
-                                                                class="form-control form-control-sm"
+                                                                class="form-control form-control-sm input-text"
                                                                 name="configuracion[mejor][<?php echo e($better['COLUMN_NAME']); ?>][nombre]" />
                                                         <?php endif; ?>
                                                     <?php else: ?>
                                                         <input type="text" placeholder="Ingrese un nombre"
-                                                            class="form-control form-control-sm"
+                                                            class="form-control form-control-sm input-text"
                                                             name="configuracion[mejor][<?php echo e($better['COLUMN_NAME']); ?>][nombre]" />
                                                     <?php endif; ?>
                                                 <?php else: ?>
-                                                    <input class="form-control form-control-sm"
+                                                    <input class="form-control form-control-sm input-text"
                                                         placeholder="Ingrese un nombre" type="text"
                                                         name="configuracion[mejor][<?php echo e($better['COLUMN_NAME']); ?>][nombre]" />
                                                 <?php endif; ?>
@@ -148,15 +153,15 @@
                                                                 checked
                                                                 value="<?php echo e($channels_config['mejor'][$better['COLUMN_NAME']]['utilizar']); ?>" />
                                                         <?php else: ?>
-                                                            <input type="checkbox"
+                                                            <input class="checks" type="checkbox"
                                                                 name="configuracion[mejor][<?php echo e($better['COLUMN_NAME']); ?>][utilizar]" />
                                                         <?php endif; ?>
                                                     <?php else: ?>
-                                                        <input type="checkbox"
+                                                        <input class="checks" type="checkbox"
                                                             name="configuracion[mejor][<?php echo e($better['COLUMN_NAME']); ?>][utilizar]" />
                                                     <?php endif; ?>
                                                 <?php else: ?>
-                                                    <input type="checkbox"
+                                                    <input class="checks" type="checkbox"
                                                         name="configuracion[mejor][<?php echo e($better['COLUMN_NAME']); ?>][utilizar]" />
                                                 <?php endif; ?>
                                                 
@@ -182,4 +187,42 @@
         </div>
     </div>
 </div>
+<?php $__env->startSection('script'); ?>
+    <script>
+        // const checks = document.querySelectorAll('checks')
+
+        // console.log(checks)
+
+        document.getElementById("editStructure").addEventListener("submit", function(event) {
+            // Evitar que el formulario se envíe por defecto
+            event.preventDefault();
+
+            // Obtener todos los checkboxes y campos de texto
+            var checkboxes = document.getElementsByClassName("checks");
+            var textInputs = document.getElementsByClassName("input-text");
+
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].checked) {
+                    console.log('si: ' + i)
+                    // Obtener el índice del checkbox seleccionado
+                    var index = checkboxes[i].getAttribute("data-related-checkbox");
+
+                    // Obtener el campo de texto correspondiente al checkbox seleccionado
+                    var relatedTextInput = textInputs[i];
+
+                    // Validar si el campo de texto está vacío
+                    if (relatedTextInput.value.trim() === "") {
+                        // Si está vacío, mostrar un mensaje de error o realizar la acción que desees
+                        alert("El campo de texto relacionado al checkbox seleccionado es requerido.");
+                        relatedTextInput.focus()
+                        return; // Detener el envío del formulario
+                    }
+                }
+            }
+
+            // Si todos los checkboxes seleccionados tienen campos de texto no vacíos, enviar el formulario
+            this.submit();
+        });
+    </script>
+<?php $__env->stopSection(); ?>
 <?php /**PATH C:\Users\PC\Desktop\CODIGO\GIT\app-estrategias\resources\views/clients/modals/edit_structure.blade.php ENDPATH**/ ?>

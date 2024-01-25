@@ -6,7 +6,12 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                     id="close-modal"></button>
             </div>
-            {!! Form::open(['route' => 'clients.edit-structure', 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
+            {!! Form::open([
+                'route' => 'clients.edit-structure',
+                'method' => 'POST',
+                'enctype' => 'multipart/form-data',
+                'id' => 'editStructure',
+            ]) !!}
             <input type="hidden" name="client_id" value="{{ $client['id'] }}">
             <div class="modal-body">
                 <ul class="nav nav-tabs">
@@ -40,22 +45,22 @@
                                                 @if (isset($channels_config['estructura']))
                                                     @if (in_array($estruc['COLUMN_NAME'], array_keys($channels_config['estructura'])))
                                                         @if (isset($channels_config['estructura'][$estruc['COLUMN_NAME']]['utilizar']))
-                                                            <input class="form-control form-control-sm"
+                                                            <input class="form-control form-control-sm input-text"
                                                                 placeholder="Ingrese un nombre" type="text"
                                                                 name="configuracion[estructura][{{ $estruc['COLUMN_NAME'] }}][nombre]"
                                                                 value="{{ $channels_config['estructura'][$estruc['COLUMN_NAME']]['nombre'] }}" />
                                                         @else
                                                             <input type="text" placeholder="Ingrese un nombre"
-                                                                class="form-control form-control-sm"
+                                                                class="form-control form-control-sm input-text"
                                                                 name="configuracion[estructura][{{ $estruc['COLUMN_NAME'] }}][nombre]" />
                                                         @endif
                                                     @else
                                                         <input type="text" placeholder="Ingrese un nombre"
-                                                            class="form-control form-control-sm"
+                                                            class="form-control form-control-sm input-text"
                                                             name="configuracion[estructura][{{ $estruc['COLUMN_NAME'] }}][nombre]" />
                                                     @endif
                                                 @else
-                                                    <input class="form-control form-control-sm"
+                                                    <input class="form-control form-control-sm input-text"
                                                         placeholder="Ingrese un nombre" type="text"
                                                         name="configuracion[estructura][{{ $estruc['COLUMN_NAME'] }}][nombre]" />
                                                 @endif
@@ -67,20 +72,20 @@
                                                 @if (isset($channels_config['estructura']))
                                                     @if (in_array($estruc['COLUMN_NAME'], array_keys($channels_config['estructura'])))
                                                         @if (isset($channels_config['estructura'][$estruc['COLUMN_NAME']]['utilizar']))
-                                                            <input type="checkbox"
+                                                            <input class="checks" type="checkbox"
                                                                 name="configuracion[estructura][{{ $estruc['COLUMN_NAME'] }}][utilizar]"
                                                                 checked
                                                                 value="{{ $channels_config['estructura'][$estruc['COLUMN_NAME']]['utilizar'] }}" />
                                                         @else
-                                                            <input type="checkbox"
+                                                            <input class="checks" type="checkbox"
                                                                 name="configuracion[estructura][{{ $estruc['COLUMN_NAME'] }}][utilizar]" />
                                                         @endif
                                                     @else
-                                                        <input type="checkbox"
+                                                        <input class="checks" type="checkbox"
                                                             name="configuracion[estructura][{{ $estruc['COLUMN_NAME'] }}][utilizar]" />
                                                     @endif
                                                 @else
-                                                    <input type="checkbox"
+                                                    <input class="checks" type="checkbox"
                                                         name="configuracion[estructura][{{ $estruc['COLUMN_NAME'] }}][utilizar]" />
                                                 @endif
                                                 {{-- <input type="checkbox"
@@ -114,22 +119,22 @@
                                                 @if (isset($channels_config['mejor']))
                                                     @if (in_array($better['COLUMN_NAME'], array_keys($channels_config['mejor'])))
                                                         @if (isset($channels_config['mejor'][$better['COLUMN_NAME']]['utilizar']))
-                                                            <input class="form-control form-control-sm"
+                                                            <input class="form-control form-control-sm input-text"
                                                                 placeholder="Ingrese un nombre" type="text"
                                                                 name="configuracion[mejor][{{ $better['COLUMN_NAME'] }}][nombre]"
                                                                 value="{{ $channels_config['mejor'][$better['COLUMN_NAME']]['nombre'] }}" />
                                                         @else
                                                             <input type="text" placeholder="Ingrese un nombre"
-                                                                class="form-control form-control-sm"
+                                                                class="form-control form-control-sm input-text"
                                                                 name="configuracion[mejor][{{ $better['COLUMN_NAME'] }}][nombre]" />
                                                         @endif
                                                     @else
                                                         <input type="text" placeholder="Ingrese un nombre"
-                                                            class="form-control form-control-sm"
+                                                            class="form-control form-control-sm input-text"
                                                             name="configuracion[mejor][{{ $better['COLUMN_NAME'] }}][nombre]" />
                                                     @endif
                                                 @else
-                                                    <input class="form-control form-control-sm"
+                                                    <input class="form-control form-control-sm input-text"
                                                         placeholder="Ingrese un nombre" type="text"
                                                         name="configuracion[mejor][{{ $better['COLUMN_NAME'] }}][nombre]" />
                                                 @endif
@@ -146,15 +151,15 @@
                                                                 checked
                                                                 value="{{ $channels_config['mejor'][$better['COLUMN_NAME']]['utilizar'] }}" />
                                                         @else
-                                                            <input type="checkbox"
+                                                            <input class="checks" type="checkbox"
                                                                 name="configuracion[mejor][{{ $better['COLUMN_NAME'] }}][utilizar]" />
                                                         @endif
                                                     @else
-                                                        <input type="checkbox"
+                                                        <input class="checks" type="checkbox"
                                                             name="configuracion[mejor][{{ $better['COLUMN_NAME'] }}][utilizar]" />
                                                     @endif
                                                 @else
-                                                    <input type="checkbox"
+                                                    <input class="checks" type="checkbox"
                                                         name="configuracion[mejor][{{ $better['COLUMN_NAME'] }}][utilizar]" />
                                                 @endif
                                                 {{-- <input type="checkbox"
@@ -180,3 +185,41 @@
         </div>
     </div>
 </div>
+@section('script')
+    <script>
+        // const checks = document.querySelectorAll('checks')
+
+        // console.log(checks)
+
+        document.getElementById("editStructure").addEventListener("submit", function(event) {
+            // Evitar que el formulario se envíe por defecto
+            event.preventDefault();
+
+            // Obtener todos los checkboxes y campos de texto
+            var checkboxes = document.getElementsByClassName("checks");
+            var textInputs = document.getElementsByClassName("input-text");
+
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].checked) {
+                    console.log('si: ' + i)
+                    // Obtener el índice del checkbox seleccionado
+                    var index = checkboxes[i].getAttribute("data-related-checkbox");
+
+                    // Obtener el campo de texto correspondiente al checkbox seleccionado
+                    var relatedTextInput = textInputs[i];
+
+                    // Validar si el campo de texto está vacío
+                    if (relatedTextInput.value.trim() === "") {
+                        // Si está vacío, mostrar un mensaje de error o realizar la acción que desees
+                        alert("El campo de texto es requerido.");
+                        relatedTextInput.focus()
+                        return; // Detener el envío del formulario
+                    }
+                }
+            }
+
+            // Si todos los checkboxes seleccionados tienen campos de texto no vacíos, enviar el formulario
+            this.submit();
+        });
+    </script>
+@endsection
