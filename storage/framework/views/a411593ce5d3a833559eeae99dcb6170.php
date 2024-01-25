@@ -91,8 +91,8 @@
                                                     <ul class="list-inline hstack gap-2 mb-0">
                                                         <li class="list-inline-item" data-bs-toggle="tooltip"
                                                             data-bs-trigger="hover" data-bs-placement="top" title="Stop">
-                                                            <a class="remove-item-btn" data-bs-toggle="modal"
-                                                                href="#">
+                                                            <a data-identificador="<?php echo e($strategy['id']); ?>"
+                                                                class="remove-item-btn detener-estrategia">
                                                                 <i class="ri-stop-circle-line align-bottom text-muted"></i>
                                                             </a>
                                                         </li>
@@ -116,6 +116,48 @@
                 </div>
             </div>
         </div>
+    <?php $__env->stopSection(); ?>
+    <?php $__env->startSection('script'); ?>
+        <script>
+            const enlacesElement = document.querySelectorAll('.detener-estrategia');
+
+            if (enlacesElement !== null) {
+                enlacesElement.forEach((enlaceElement) => {
+                    enlaceElement.addEventListener('click', (event) => {
+                        console.log(enlaceElement.dataset.identificador)
+                        const confirmacion = confirm('¿Desea detener la estrategia?');
+                        if (!confirmacion) {
+                            event.preventDefault();
+                        } else {
+                            fetch(`http://api.iawave:3000/api/v1/estrategia/detener/${enlaceElement.dataset.identificador}`, {
+                                    method: 'PUT',
+                                })
+                                .then(response => {
+                                    if (response.ok) {
+                                        // La respuesta fue exitosa (código de estado HTTP 200-299)
+                                        return response
+                                            .json(); // Devuelve una promesa que resuelve a un objeto JSON
+                                    } else {
+                                        // La respuesta no fue exitosa
+                                        throw new Error('Error de respuesta');
+                                    }
+                                })
+                                .then(data => {
+                                    // Haz algo con los datos recibidos
+                                    if (data.status === "201") {
+                                        alert('Detenido con exito')
+                                        location.reload()
+                                    }
+                                })
+                                .catch(error => {
+                                    // Manejar errores de red u otros errores
+                                    console.error(error);
+                                });
+                        }
+                    });
+                });
+            }
+        </script>
     <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\PC\Desktop\CODIGO\GIT\app-estrategias\resources\views/strategy/index.blade.php ENDPATH**/ ?>

@@ -105,8 +105,8 @@
                                                     <ul class="list-inline hstack gap-2 mb-0">
                                                         <li class="list-inline-item" data-bs-toggle="tooltip"
                                                             data-bs-trigger="hover" data-bs-placement="top" title="Stop">
-                                                            <a class="remove-item-btn" data-bs-toggle="modal"
-                                                                href="#">
+                                                            <a data-identificador="{{ $strategy['id'] }}"
+                                                                class="remove-item-btn detener-estrategia">
                                                                 <i class="ri-stop-circle-line align-bottom text-muted"></i>
                                                             </a>
                                                         </li>
@@ -130,4 +130,46 @@
                 </div>
             </div>
         </div>
+    @endsection
+    @section('script')
+        <script>
+            const enlacesElement = document.querySelectorAll('.detener-estrategia');
+
+            if (enlacesElement !== null) {
+                enlacesElement.forEach((enlaceElement) => {
+                    enlaceElement.addEventListener('click', (event) => {
+                        console.log(enlaceElement.dataset.identificador)
+                        const confirmacion = confirm('¿Desea detener la estrategia?');
+                        if (!confirmacion) {
+                            event.preventDefault();
+                        } else {
+                            fetch(`http://api.iawave:3000/api/v1/estrategia/detener/${enlaceElement.dataset.identificador}`, {
+                                    method: 'PUT',
+                                })
+                                .then(response => {
+                                    if (response.ok) {
+                                        // La respuesta fue exitosa (código de estado HTTP 200-299)
+                                        return response
+                                            .json(); // Devuelve una promesa que resuelve a un objeto JSON
+                                    } else {
+                                        // La respuesta no fue exitosa
+                                        throw new Error('Error de respuesta');
+                                    }
+                                })
+                                .then(data => {
+                                    // Haz algo con los datos recibidos
+                                    if (data.status === "201") {
+                                        alert('Detenido con exito')
+                                        location.reload()
+                                    }
+                                })
+                                .catch(error => {
+                                    // Manejar errores de red u otros errores
+                                    console.error(error);
+                                });
+                        }
+                    });
+                });
+            }
+        </script>
     @endsection
