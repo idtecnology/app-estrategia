@@ -121,26 +121,32 @@ class ClientController extends Controller
     {
         $channels_config = self::getClientConfigChannelStructure($request->client_id);
 
-        $config_request_estructura = $request->configuracion['estructura'];
-        $config_request_mejor = $request->configuracion['mejor'];
-        foreach ($config_request_estructura as $clave => $valor) {
-            // Verificar si la clave actual tiene una propiedad "nombre"
-            if (isset($valor["nombre"])) {
-                // Convertir a mayúsculas y asignar de nuevo
-                $config_request_estructura[$clave]["nombre"] = $valor["nombre"] ? strtoupper($valor["nombre"]) : null;
+
+
+        if (array_key_exists('estructura', $request->configuracion)) {
+            $config_request_estructura = $request->configuracion['estructura'];
+            foreach ($config_request_estructura as $clave => $valor) {
+                // Verificar si la clave actual tiene una propiedad "nombre"
+                if (isset($valor["nombre"])) {
+                    // Convertir a mayúsculas y asignar de nuevo
+                    $config_request_estructura[$clave]["nombre"] = $valor["nombre"] ? strtoupper($valor["nombre"]) : null;
+                }
             }
+            $channels_config["estructura"] = $config_request_estructura;
         }
 
-        foreach ($config_request_mejor as $clave2 => $valor2) {
-            // Verificar si la clave actual tiene una propiedad "nombre"
-            if (isset($valor2["nombre"])) {
-                // Convertir a mayúsculas y asignar de nuevo
-                $config_request_mejor[$clave2]["nombre"] = $valor2["nombre"] ? strtoupper($valor2["nombre"]) : null;
+        if (array_key_exists('mejor', $request->configuracion)) {
+            $config_request_mejor = $request->configuracion['mejor'];
+            foreach ($config_request_mejor as $clave2 => $valor2) {
+                // Verificar si la clave actual tiene una propiedad "nombre"
+                if (isset($valor2["nombre"])) {
+                    // Convertir a mayúsculas y asignar de nuevo
+                    $config_request_mejor[$clave2]["nombre"] = $valor2["nombre"] ? strtoupper($valor2["nombre"]) : null;
+                }
             }
+            $channels_config['mejor'] = $config_request_mejor;
         }
 
-        $channels_config['mejor'] = $config_request_mejor;
-        $channels_config["estructura"] = $config_request_estructura;
         $update = [];
         $update['idClient'] = intval($request->client_id);
         $update['channels'] = json_encode($channels_config, JSON_FORCE_OBJECT);
