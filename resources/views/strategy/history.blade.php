@@ -13,6 +13,9 @@
             Listado historico {{ $data_client['prefix_client'] }}
         @endslot
     @endcomponent
+    @php
+        date_default_timezone_set('UTC');
+    @endphp
     <div class="row">
         <div class="col-lg-12">
             <div class="card">

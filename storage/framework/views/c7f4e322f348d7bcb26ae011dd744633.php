@@ -15,6 +15,9 @@
 
         <?php $__env->endSlot(); ?>
     <?php echo $__env->renderComponent(); ?>
+    <?php
+        date_default_timezone_set('UTC');
+    ?>
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
@@ -102,20 +105,6 @@
         <script src="<?php echo e(URL::asset('build/js/pages/apexcharts-pie.init.js')); ?>"></script>
         <script>
             var chartDonutBasicColors = getChartColorsArray("simple_dount_chart");
-
-            function formatearNumeroCustom(numero) {
-                if (typeof numero === 'number' && !isNaN(numero)) {
-                    const partes = numero.toFixed(2).split('.');
-                    const parteEntera = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                    const resultado = parteEntera + '.' + partes[1];
-                    return resultado;
-                } else {
-                    // Manejar el caso en el que 'numero' no es un número válido
-                    console.error("El valor proporcionado no es un número válido.");
-                    return null; // O puedes devolver una cadena vacía u otro valor según tu lógica
-                }
-            }
-
 
             function verEstadisticas(id, prefix) {
                 if (chart) {

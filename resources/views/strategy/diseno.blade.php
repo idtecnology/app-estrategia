@@ -14,6 +14,9 @@
             Diseñar {{ $client['prefix'] }}
         @endslot
     @endcomponent
+    @php
+        date_default_timezone_set('UTC');
+    @endphp
     <div class="row">
 
         <div class="col-lg-12">
