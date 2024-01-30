@@ -41,6 +41,7 @@ Route::group(['middleware' => ['auth']], function () {
     route::post('/strategy/delete-strategy', [StrategyController::class, 'deleteStrategy'])->name('strategy.delete-strategy');
     route::post('/strategy/stopped-strategy', [StrategyController::class, 'stopedStrategy'])->name('strategy.stopped-strategy');
     route::get('/strategy/history/{client}/{history}', [StrategyController::class, 'history'])->name('strategy.history');
+    route::post('/strategy/estadisticas', [StrategyController::class, 'estadisticas'])->name('strategy.estadisticas');
 
     //Clients
     Route::post('/clients/edit-channels', [ClientController::class, 'editChannels'])->name('clients.edit-channels');

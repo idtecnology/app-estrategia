@@ -71,7 +71,11 @@
                                                 <td class="id" style="display:none;"><a href="javascript:void(0);"
                                                         class="fw-medium link-primary"><?php echo e($strategy['id']); ?></a>
                                                 </td>
-                                                <td class="pos">#</td>
+                                                <td class="pos"><a class="text-primary" aria-label="Estadisticas"
+                                                        title="Estadisticas" style="cursor: pointer" data-bs-toggle="modal"
+                                                        data-bs-target="#showModalEstadisticas"
+                                                        onclick="verEstadisticas(<?php echo e($strategy['id']); ?>)"><?php echo e($strategy['id']); ?></a>
+                                                </td>
                                                 <td class="name">
                                                     <?php echo e($strategy['canal']); ?>
 
@@ -114,11 +118,67 @@
                         </div>
                     </div>
                 </div>
+                <?php echo $__env->make('strategy.modals.estadistica', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
             </div>
         </div>
     <?php $__env->stopSection(); ?>
     <?php $__env->startSection('script'); ?>
+        <script src="<?php echo e(URL::asset('build/libs/apexcharts/apexcharts.min.js')); ?>"></script>
+        <script src="<?php echo e(URL::asset('build/js/pages/apexcharts-pie.init.js')); ?>"></script>
         <script>
+            var chartDonutBasicColors = getChartColorsArray("simple_dount_chart");
+
+
+            function verEstadisticas(id) {
+                if (chart) {
+                    chart.destroy();
+                }
+                fetch('<?php echo e(route('strategy.estadisticas')); ?>', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        id: id,
+                    }),
+                    headers: {
+                        'content-type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    }
+                }).then(response => {
+                    return response.json();
+                }).then(data => {
+                    let regsArray = Object.values(data).map(item => item.regs);
+                    let statusArray = Object.values(data).map(item => item.status);
+
+                    if (chartDonutBasicColors) {
+                        var options = {
+                            series: regsArray,
+                            labels: statusArray,
+                            chart: {
+                                height: 400,
+                                type: 'pie',
+                            },
+                            legend: {
+                                position: 'bottom'
+                            },
+                            dataLabels: {
+                                enabled: true,
+                                dropShadow: {
+                                    enabled: false,
+                                }
+
+                            },
+                            colors: chartDonutBasicColors
+                        };
+                        chart = new ApexCharts(document.querySelector("#simple_dount_chart"), options);
+                        chart.render();
+                    }
+                });
+            }
+
+
+
+
+
+
             function stopedStrategy(id) {
                 fetch('<?php echo e(route('strategy.stopped-strategy')); ?>', {
                     method: 'POST',

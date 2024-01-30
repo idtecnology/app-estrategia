@@ -72,6 +72,36 @@
 
                         </div>
                     </div>
+                    <div class="clearfix"></div>
+                    <div class="col-lg-6">
+                        <div class="form-check">
+                            <?php echo e(Form::checkbox('columnas[]', '@nombre@', false, ['class' => 'form-check-input'])); ?>
+
+                            <label class="form-check-label" for="flexCheckChecked">
+                                nombre_cliente
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <?php echo e(Form::checkbox('columnas[]', '@id_crm@', false, ['class' => 'form-check-input'])); ?>
+
+                            <label class="form-check-label" for="flexCheckChecked">
+                                rut_cliente
+                            </label>
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="form-check">
+                            <?php echo e(Form::checkbox('columnas_calculadas[]', '@FECHA@', false, ['class' => 'form-check-input'])); ?>
+
+                            <label class="form-check-label" for="flexCheckChecked">
+                                FECHA
+                            </label>
+                        </div>
+
+
+                    </div>
 
                     <div class="col-lg-6">
                         <div>

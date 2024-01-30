@@ -10,6 +10,9 @@ class EmailTemplateController extends Controller
 {
     public function store(Request $request)
     {
+
+        // return $request;
+
         // Creamos un arreglo de datos para proceder a enviar al endpoint y almacenar.
         $saveConfig = [
             'nombreTemplate' =>  strtoupper($request->nombreTemplate),
@@ -19,9 +22,11 @@ class EmailTemplateController extends Controller
             'nombreFrom' => strtoupper($request->nombreFrom),
             'asunto' => strtoupper($request->asunto),
             'emailReply' => $request->emailReply,
-            'columnas' => json_encode([]),
-            'columnasCalc' => json_encode([]),
+            'columnas' => json_encode($request->columnas),
+            'columnasCalc' => json_encode($request->columnas_calculadas),
         ];
+
+        // return $saveConfig;
 
         try {
             // Cargamos los datos en el enpoint

@@ -454,4 +454,11 @@ class StrategyController extends Controller
 
         return view('strategy.history', compact('historical', 'data_client', 'suma_total', 'porcentaje_total'));
     }
+
+
+    public function estadisticas(Request $request)
+    {
+        $actived = Http::get(env('API_URL') . env('API_ESTRATEGIA') . "/estadisticas/" . $request->id)->json(0);
+        return $actived;
+    }
 }

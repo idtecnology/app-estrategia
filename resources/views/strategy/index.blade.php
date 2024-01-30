@@ -88,7 +88,11 @@
                                                 <td class="id" style="display:none;"><a href="javascript:void(0);"
                                                         class="fw-medium link-primary">{{ $strategy['id'] }}</a>
                                                 </td>
-                                                <td class="pos">#</td>
+                                                <td class="pos"><a class="text-primary" aria-label="Estadisticas"
+                                                        title="Estadisticas" style="cursor: pointer" data-bs-toggle="modal"
+                                                        data-bs-target="#showModalEstadisticas"
+                                                        onclick="verEstadisticas({{ $strategy['id'] }})">{{ $strategy['id'] }}</a>
+                                                </td>
                                                 <td class="name">
                                                     {{ $strategy['canal'] }}
                                                 </td>
@@ -128,11 +132,67 @@
                         </div>
                     </div>
                 </div>
+                @include('strategy.modals.estadistica')
             </div>
         </div>
     @endsection
     @section('script')
+        <script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
+        <script src="{{ URL::asset('build/js/pages/apexcharts-pie.init.js') }}"></script>
         <script>
+            var chartDonutBasicColors = getChartColorsArray("simple_dount_chart");
+
+
+            function verEstadisticas(id) {
+                if (chart) {
+                    chart.destroy();
+                }
+                fetch('{{ route('strategy.estadisticas') }}', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        id: id,
+                    }),
+                    headers: {
+                        'content-type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    }
+                }).then(response => {
+                    return response.json();
+                }).then(data => {
+                    let regsArray = Object.values(data).map(item => item.regs);
+                    let statusArray = Object.values(data).map(item => item.status);
+
+                    if (chartDonutBasicColors) {
+                        var options = {
+                            series: regsArray,
+                            labels: statusArray,
+                            chart: {
+                                height: 400,
+                                type: 'pie',
+                            },
+                            legend: {
+                                position: 'bottom'
+                            },
+                            dataLabels: {
+                                enabled: true,
+                                dropShadow: {
+                                    enabled: false,
+                                }
+
+                            },
+                            colors: chartDonutBasicColors
+                        };
+                        chart = new ApexCharts(document.querySelector("#simple_dount_chart"), options);
+                        chart.render();
+                    }
+                });
+            }
+
+
+
+
+
+
             function stopedStrategy(id) {
                 fetch('{{ route('strategy.stopped-strategy') }}', {
                     method: 'POST',
