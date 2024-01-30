@@ -65,6 +65,7 @@
                         </div>
                     </div> --}}
                 </div>
+
                 <div class="card-body">
                     <div>
                         <div class="table-responsive table-card mb-3">
@@ -91,7 +92,7 @@
                                                 <td class="pos"><a class="text-primary" aria-label="Estadisticas"
                                                         title="Estadisticas" style="cursor: pointer" data-bs-toggle="modal"
                                                         data-bs-target="#showModalEstadisticas"
-                                                        onclick="verEstadisticas({{ $strategy['id'] }})">{{ $strategy['id'] }}</a>
+                                                        onclick="verEstadisticas({{ $strategy['id'] }}, '{{ $data_client['prefix_client'] }}')">{{ $strategy['id'] }}</a>
                                                 </td>
                                                 <td class="name">
                                                     {{ $strategy['canal'] }}
@@ -143,14 +144,33 @@
             var chartDonutBasicColors = getChartColorsArray("simple_dount_chart");
 
 
-            function verEstadisticas(id) {
+            function verEstadisticas(id, prefix) {
                 if (chart) {
                     chart.destroy();
                 }
+                let opciones = {
+                    style: "decimal",
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                };
+                let linea = '';
+                var tablaDatos = document.querySelector("#tabla-datos")
+
+                var title = document.querySelector("#title-estadisticas")
+                var dataEstrategia = document.querySelector("#data-estrategia")
+                var tablaFoot = document.querySelector("#tabla-foot")
+
+
+                title.innerHTML = ''
+                dataEstrategia.innerHTML = ''
+                tablaDatos.innerHTML = ''
+                tablaFoot.innerHTML = ''
+
                 fetch('{{ route('strategy.estadisticas') }}', {
                     method: 'POST',
                     body: JSON.stringify({
                         id: id,
+                        prefix: prefix
                     }),
                     headers: {
                         'content-type': 'application/json',
@@ -159,9 +179,64 @@
                 }).then(response => {
                     return response.json();
                 }).then(data => {
-                    let regsArray = Object.values(data).map(item => item.regs);
-                    let statusArray = Object.values(data).map(item => item.status);
+                    let regsArray = Object.values(data.estadisticas).map(item => item.regs);
+                    let statusArray = Object.values(data.estadisticas).map(item => item.status);
 
+                    title.innerHTML = data.estrategia.prefix_client + ' ' + data.estrategia.id
+                    dataEstrategia.innerHTML = `
+                        <table class='table table-sm table-bordered align-middle'>
+                            <tr>
+                                <th>Criterio</th>
+                                <td>${data.estrategia.onlyWhere}</td>
+                            </tr>
+                            <tr>
+                                <th>Total de registros del criterio</th>
+                                <td>${data.estrategia.total_registros.toLocaleString(
+                        "de-DE")}</td>
+                            </tr>
+                            <tr>
+                                <th>Cobertura de la cartera</th>
+                                <td>${data.estrategia.cobertura.toLocaleString(
+                        "de-DE")}%</td>
+                            </tr>
+                        </table>`
+
+
+                    let tr = 0
+                    let av = 0
+
+                    for (let line of data.estadisticas) {
+                        linea += '<tr class="text-center" >'
+                        linea += '<td>' + line.status + '</td>';
+                        linea += '<td>' + line.regs.toLocaleString(
+                            "de-DE") + '</td>';
+                        linea += '<td>' + ((line.regs / data.estrategia.total_registros) * 100).toFixed(2)
+                            .toLocaleString(
+                                "de-DE") + '%</td>';
+                        linea += '</tr>';
+
+                        tr += line.regs
+                        av += ((line.regs / data.estrategia.total_registros) * 100)
+                    }
+
+
+                    tablaFoot.innerHTML = `
+                            <tr>
+                                <th>Total recorrido</th>
+                                <th>${tr.toLocaleString(
+                            "de-DE")}</th>
+                                <th>${av.toFixed(2).toLocaleString(
+                            "de-DE")}%</th>
+                            </tr>
+                        `
+                    // let linea = '<tr><td>lorem</td></tr>'
+                    tablaDatos.innerHTML = linea;
+
+
+
+
+
+                    console.log(data)
                     if (chartDonutBasicColors) {
                         var options = {
                             series: regsArray,

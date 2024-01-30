@@ -22,9 +22,9 @@ class StrategyController extends Controller
         $suma_total = 0;
         $porcentaje_total = 0;
 
-        foreach ($strategies as &$d3) {
-            unset($d3['registros']);
-        }
+        // foreach ($strategies as &$d3) {
+        //     unset($d3['registros']);
+        // }
 
 
         $data_counter = count($strategies);
@@ -59,7 +59,7 @@ class StrategyController extends Controller
 
     protected static function getClientData($prefix, $diseno = false)
     {
-        $clients = Http::get(env('API_URL') . env('API_CLIENTS') . '/' . auth()->user()->empresa_id)->collect()[0];
+        $clients = Http::get(env('API_URL') . env('API_CLIENTS') . '/' . auth()->user()->empresa_id)->json(0);
         $client = [];
 
         foreach ($clients as $clien) {
@@ -221,14 +221,14 @@ class StrategyController extends Controller
 
         $param = [
             "idCliente" => $request->id_cliente,
-            "cartera" => $request->table_name,
+            "cartera" => $request->table_name, // inutilizado 
             "criterio" => $request['query'],
             "template" => $request->template,
             "canal" => $request->channel,
         ];
 
         try {
-            $result_query = Http::post(env('API_URL') . env('API_ESTRATEGIA') . "/records", $param);
+            return $result_query = Http::post(env('API_URL') . env('API_ESTRATEGIA') . "/records", $param);
 
             if ($result_query) {
                 if ($result_query == 'false') {
@@ -458,7 +458,18 @@ class StrategyController extends Controller
 
     public function estadisticas(Request $request)
     {
-        $actived = Http::get(env('API_URL') . env('API_ESTRATEGIA') . "/estadisticas/" . $request->id)->json(0);
-        return $actived;
+        $strategies = Http::timeout(3600)->get(env('API_URL') . env('API_ESTRATEGIAS') . '/' . strtoupper($request->prefix))->json(0);
+
+        $stra = [];
+
+        foreach ($strategies as $st) {
+            if ($request->id == $st['id']) {
+                $stra = $st;
+            }
+        }
+
+        // return $stra;
+        $estadistica = Http::get(env('API_URL') . env('API_ESTRATEGIA') . "/estadisticas/" . $request->id)->json(0);
+        return ['estadisticas' => $estadistica, 'estrategia' => $stra];
     }
 }
