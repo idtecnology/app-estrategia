@@ -75,18 +75,6 @@
                                             </tr>
                                         @endif
                                     @endforeach
-                                <tfoot>
-                                    <tr>
-                                        <td colspan="2">&nbsp;</td>
-                                        <td scope="col">
-                                            <strong>{{ number_format($porcentaje_total, 2, ',', '.') }}</strong>
-                                        </td>
-                                        <td scope="col">
-                                            <strong>{{ number_format($suma_total, 0, ',', '.') }}</strong>
-                                        </td>
-                                        <td colspan="3">&nbsp;</td>
-                                    </tr>
-                                </tfoot>
                             </table>
                         </div>
                     </div>
