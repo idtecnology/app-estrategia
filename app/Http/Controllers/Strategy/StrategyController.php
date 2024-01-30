@@ -420,9 +420,7 @@ class StrategyController extends Controller
         $suma_total = 0;
         $porcentaje_total = 0;
 
-        foreach ($historical as &$d3) {
-            unset($d3['registros']);
-        }
+        $historical = array_reverse($historical);
 
 
         $data_counter = count($historical);
