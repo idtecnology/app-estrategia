@@ -228,7 +228,7 @@ class StrategyController extends Controller
         ];
 
         try {
-            return $result_query = Http::post(env('API_URL') . env('API_ESTRATEGIA') . "/records", $param);
+            $result_query = Http::post(env('API_URL') . env('API_ESTRATEGIA') . "/records", $param);
 
             if ($result_query) {
                 if ($result_query == 'false') {
