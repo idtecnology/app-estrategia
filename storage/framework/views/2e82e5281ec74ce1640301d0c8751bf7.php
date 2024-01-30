@@ -385,10 +385,13 @@
                     })
                     document.getElementById('cobertura').innerHTML =
                         `${data.percent_cober.toLocaleString("de-DE", opciones)}%`
-                    document.getElementById('unicos').innerHTML = data.total_unicos
+                    document.getElementById('unicos').innerHTML = data.total_unicos.toLocaleString(
+                        "de-DE")
                     document.getElementById('repetidos').innerHTML = data.total_repetidos.toLocaleString(
                         "de-DE")
-                    document.getElementById('total').innerHTML = data.total_r
+                    document.getElementById('total').innerHTML = data.total_r.toLocaleString(
+                        "de-DE")
+
                     document.getElementById('cober').value = data.percent_cober.toFixed(2)
                     document.getElementById('unic').value = data.total_unicos
                     document.getElementById('repe').value = data.total_repetidos
