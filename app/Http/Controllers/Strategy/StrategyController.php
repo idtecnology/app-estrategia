@@ -458,7 +458,13 @@ class StrategyController extends Controller
 
     public function estadisticas(Request $request)
     {
-        $strategies = Http::timeout(3600)->get(env('API_URL') . env('API_ESTRATEGIAS') . '/' . strtoupper($request->prefix))->json(0);
+        if ($request->historico == false) {
+            $strategies = Http::timeout(3600)->get(env('API_URL') . env('API_ESTRATEGIAS') . '/' . strtoupper($request->prefix))->json(0);
+        } else {
+            $param = ["prefix" => $request->prefix, "type" => $request->type];
+            $strategies = Http::withBody(json_encode($param))->get(env('API_URL') . env('API_ESTRATEGIA') . "/tipo", $param)->json(0);
+        }
+
 
         $stra = [];
 

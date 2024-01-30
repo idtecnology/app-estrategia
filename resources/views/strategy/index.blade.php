@@ -170,7 +170,8 @@
                     method: 'POST',
                     body: JSON.stringify({
                         id: id,
-                        prefix: prefix
+                        prefix: prefix,
+                        historico: false,
                     }),
                     headers: {
                         'content-type': 'application/json',
@@ -183,6 +184,7 @@
                     let statusArray = Object.values(data.estadisticas).map(item => item.status);
 
                     title.innerHTML = data.estrategia.prefix_client + ' ' + data.estrategia.id
+
                     dataEstrategia.innerHTML = `
                         <table class='table table-sm table-bordered align-middle'>
                             <tr>
@@ -191,13 +193,11 @@
                             </tr>
                             <tr>
                                 <th>Total de registros del criterio</th>
-                                <td>${data.estrategia.total_registros.toLocaleString(
-                        "de-DE")}</td>
+                                <td>${data.estrategia.total_registros.toLocaleString("de-DE")}</td>
                             </tr>
                             <tr>
                                 <th>Cobertura de la cartera</th>
-                                <td>${data.estrategia.cobertura.toLocaleString(
-                        "de-DE")}%</td>
+                                <td>${data.estrategia.cobertura.toLocaleString("de-DE")}%</td>
                             </tr>
                         </table>`
 
@@ -208,11 +208,9 @@
                     for (let line of data.estadisticas) {
                         linea += '<tr class="text-center" >'
                         linea += '<td>' + line.status + '</td>';
-                        linea += '<td>' + line.regs.toLocaleString(
-                            "de-DE") + '</td>';
+                        linea += '<td>' + line.regs.toLocaleString("de-DE") + '</td>';
                         linea += '<td>' + ((line.regs / data.estrategia.total_registros) * 100).toFixed(2)
-                            .toLocaleString(
-                                "de-DE") + '%</td>';
+                            .toLocaleString("de-DE") + '%</td>';
                         linea += '</tr>';
 
                         tr += line.regs
@@ -223,20 +221,12 @@
                     tablaFoot.innerHTML = `
                             <tr>
                                 <th>Total recorrido</th>
-                                <th>${tr.toLocaleString(
-                            "de-DE")}</th>
-                                <th>${av.toFixed(2).toLocaleString(
-                            "de-DE")}%</th>
+                                <th>${tr.toLocaleString("de-DE")}</th>
+                                <th>${av.toFixed(2).toLocaleString("de-DE")}%</th>
                             </tr>
-                        `
-                    // let linea = '<tr><td>lorem</td></tr>'
+                            `
                     tablaDatos.innerHTML = linea;
 
-
-
-
-
-                    console.log(data)
                     if (chartDonutBasicColors) {
                         var options = {
                             series: regsArray,

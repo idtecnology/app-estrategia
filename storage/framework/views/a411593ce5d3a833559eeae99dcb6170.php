@@ -156,7 +156,8 @@
                     method: 'POST',
                     body: JSON.stringify({
                         id: id,
-                        prefix: prefix
+                        prefix: prefix,
+                        historico: false,
                     }),
                     headers: {
                         'content-type': 'application/json',
